@@ -1,3 +1,5 @@
+import java.util.Optional;
+
 public class Customer {
     private final String name;
     private final String lastName;
@@ -45,12 +47,12 @@ public class Customer {
      * @return concatenated form of name and lastName, e.g. "John Goodman"
      */
     public String fullName() {
-        return String.format("%s %s", name, lastName);
+        return String.format("%s %s", Optional.ofNullable(name).orElse(""), Optional.ofNullable(lastName).orElse("")).trim();
     }
 
     /**
      * Delegates withdraw to Account class
-     * @param amount
+     * @param amount amount of money
      * @return false if account is null and prints "Customer fullName() has no active account", otherwise returns the result of Account's withdraw method
      */
     public boolean withdrawFromCurrentAccount(double amount) {
@@ -64,7 +66,7 @@ public class Customer {
 
     /**
      * Delegates adding money to Account class
-     * @param amount
+     * @param amount amount of money
      * @return false if account is null and prints "Customer fullName() has no active account", otherwise returns the result of Account's add method
      */
     public boolean addMoneyToCurrentAccount(double amount) {
