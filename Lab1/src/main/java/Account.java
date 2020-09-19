@@ -2,6 +2,10 @@ public class Account {
     private final long id;
     private double balance;
 
+    public double getBalance() {
+        return balance;
+    }
+
     public Account(long id) {
         this.id = id;
     }
@@ -11,7 +15,7 @@ public class Account {
      *
      * @param amount amount of money to withdraw
      * @return true
-     * if amount &gt 0 and (balance - amount) &gt= 0,
+     * if amount &gt 0 and (balance - amount) &ge 0,
      * otherwise returns false
      */
     public boolean withdraw(double amount) {
