@@ -11,11 +11,14 @@ public class Account {
      *
      * @param amount amount of money to withdraw
      * @return true
-     * if amount &gt 0 and (balance - amount) &gt 0,
+     * if amount &gt 0 and (balance - amount) &gt= 0,
      * otherwise returns false
      */
     public boolean withdraw(double amount) {
-        // write your code here
+        if (amount <= 0) return false;
+        if (balance - amount < 0) return false;
+        balance -= amount;
+        return true;
     }
 
     /**
@@ -25,6 +28,8 @@ public class Account {
      * @return true if amount &gt 0, otherwise returns false
      */
     public boolean add(double amount) {
-        // write your code here
+        if (amount <= 0) return false;
+        balance += amount;
+        return true;
     }
 }
