@@ -22,7 +22,6 @@ public class Customer {
             System.out.format("Customer %s already has the active account", fullName());
             return false;
         }
-
         account = new Account(accountId);
         return true;
     }
@@ -37,7 +36,6 @@ public class Customer {
             System.out.format("Customer %s has no active account to close", fullName());
             return false;
         }
-
         account = null;
         return true;
     }
@@ -47,7 +45,7 @@ public class Customer {
      * @return concatenated form of name and lastName, e.g. "John Goodman"
      */
     public String fullName() {
-        return String.format("%s %s", Optional.ofNullable(name).orElse(""), Optional.ofNullable(lastName).orElse("")).trim();
+        return String.format("%s %s", defaultIfNotSet(name), defaultIfNotSet(lastName)).trim();
     }
 
     /**
@@ -60,7 +58,6 @@ public class Customer {
             System.out.format("Customer %s has no active account", fullName());
             return false;
         }
-
         return account.withdraw(amount);
     }
 
@@ -74,7 +71,14 @@ public class Customer {
             System.out.format("Customer %s has no active account to close", fullName());
             return false;
         }
-
         return account.add(amount);
+    }
+
+    private static String defaultIfNotSet (String string) {
+        if (string == null || string.isEmpty()){
+            return "";
+        } else {
+            return string;
+        }
     }
 }

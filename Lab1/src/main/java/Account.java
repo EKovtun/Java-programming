@@ -19,8 +19,7 @@ public class Account {
      * otherwise returns false
      */
     public boolean withdraw(double amount) {
-        if (amount <= 0) return false;
-        if (balance - amount < 0) return false;
+        if (amount <= 0 || balance - amount < 0) return false;
         balance -= amount;
         return true;
     }
