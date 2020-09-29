@@ -8,9 +8,11 @@ public class Account {
     private final TransactionManager transactionManager;
     private final Entries entries;
 
-    public Account(long id) {
+    public Account(long id, TransactionManager transactionManager) throws IllegalArgumentException {
+        if (transactionManager == null) throw new IllegalArgumentException();
+
         this.id = id;
-        this.transactionManager = new TransactionManager();
+        this.transactionManager = transactionManager;
         this.entries = new Entries();
     }
 
@@ -60,7 +62,7 @@ public class Account {
      * Get entries history
      *
      * @param from from date, can be null
-     * @param to to date, can be null
+     * @param to to date. May be <code>null</code>
      * @return entry collection in the specified date range
      */
     public Collection<Entry> history(LocalDate from, LocalDate to) {
@@ -69,7 +71,7 @@ public class Account {
 
     /**
      * Calculates balance on the accounting entries basis
-     * @param date can be null
+     * @param date May be <code>null</code>
      * @return balance
      */
     public double balanceOn(LocalDate date) {
@@ -85,12 +87,14 @@ public class Account {
      * @return true if rollback is successful else false
      */
     public boolean rollbackLastTransaction() {
-        return transactionManager.rollbackTransaction(entries.last().getTransaction());
+        final Entry lastEntry = entries.last();
+        if (lastEntry == null) return false;
+        return transactionManager.rollbackTransaction(lastEntry.getTransaction());
     }
 
     /**
      * Add entry to entries
-     * @param entry
+     * @param entry entry
      */
     void addEntry(Entry entry) {
         entries.addEntry(entry);

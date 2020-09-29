@@ -7,31 +7,31 @@ import java.util.*;
  * Collection of entries for the account. Use it to save and get history of payments
  */
 class Entries {
-    SortedMap<LocalDate, LinkedList<Entry>> entriesMap;
+    private SortedMap<LocalDate, ArrayList<Entry>> entriesMap;
 
     Entries() {
         entriesMap = new TreeMap<>();
     }
 
-    public void addEntry(Entry entry) {
+    void addEntry(Entry entry) {
         if (entry == null) return;
         LocalDate entryDate = entry.getTime().toLocalDate();
         if (!entriesMap.containsKey(entryDate)) {
-            entriesMap.put(entryDate, new LinkedList<>());
+            entriesMap.put(entryDate, new ArrayList<>());
         }
         entriesMap.get(entryDate).add(entry);
     }
 
-    public Collection<Entry> from(LocalDate date) {
+    Collection<Entry> from(LocalDate date) {
         if (date == null || !entriesMap.containsKey(date)) {
             return new ArrayList<>();
         }
         return new ArrayList<>(entriesMap.get(date));
     }
 
-    public Collection<Entry> betweenDates(LocalDate from, LocalDate to) {
+    Collection<Entry> betweenDates(LocalDate from, LocalDate to) {
         List<Entry> result = new ArrayList<>();
-        SortedMap<LocalDate, LinkedList<Entry>> subMap;
+        SortedMap<LocalDate, ArrayList<Entry>> subMap;
 
         if (from == null) {
             if (to == null) {
@@ -52,10 +52,10 @@ class Entries {
         return result;
     }
 
-    public Entry last() {
+    Entry last() {
         if (entriesMap.isEmpty()) return null;
-        LinkedList<Entry> entries = entriesMap.get(entriesMap.lastKey());
-        entries.sort(Comparator.comparing(Entry::getTime));
-        return entries.getLast();
+        ArrayList<Entry> entriesList = entriesMap.get(entriesMap.lastKey());
+        //entriesList.sort(Comparator.comparing(Entry::getTime));
+        return entriesList.get(entriesList.size() - 1);
     }
 }

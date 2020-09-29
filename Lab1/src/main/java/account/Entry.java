@@ -12,7 +12,7 @@ class Entry {
     private final double amount;
     private final LocalDateTime time;
 
-    public Entry(Account account, TransactionManager.Transaction transaction, double amount, LocalDateTime time) throws IllegalArgumentException {
+    Entry(Account account, TransactionManager.Transaction transaction, double amount, LocalDateTime time) throws IllegalArgumentException {
         if (account == null || transaction == null || time == null) {
             throw new IllegalArgumentException();
         }
@@ -23,15 +23,15 @@ class Entry {
         this.time = time;
     }
 
-    public LocalDateTime getTime() {
+    LocalDateTime getTime() {
         return time;
     }
 
-    public Account getAccount() {
+    Account getAccount() {
         return account;
     }
 
-    public double getAmount() {
+    double getAmount() {
         return amount;
     }
 

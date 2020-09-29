@@ -24,6 +24,7 @@ public class AnalyticsManager {
             }
             Integer currentValue = accountsCounters.get(beneficiary);
             currentValue += 1;
+            accountsCounters.put(beneficiary, currentValue);
 
             if (currentValue > max) {
                 max = currentValue;
@@ -37,13 +38,15 @@ public class AnalyticsManager {
     public Collection<TransactionManager.Transaction> topTenExpensivePurchases(Account account) throws IllegalArgumentException {
         if (account == null) throw new IllegalArgumentException();
         // без стримов
-        List<TransactionManager.Transaction> result = new LinkedList<>();
+        List<TransactionManager.Transaction> result = new ArrayList<>();
         LinkedList<TransactionManager.Transaction> transactions = new LinkedList<>(transactionManager.findAllTransactionsByAccount(account));
         transactions.sort(Comparator.comparing(TransactionManager.Transaction::getAmount));
 
         Iterator<TransactionManager.Transaction> iterator = transactions.descendingIterator();
         for(int i = 0; i < 10 && iterator.hasNext(); ++i) {
-            result.add(iterator.next());
+            var transaction = iterator.next();
+            if (transaction.getOriginator() != account) continue;
+            result.add(transaction);
         }
 
         return result;

@@ -29,7 +29,7 @@ class TransactionManager {
          *
          * @throws IllegalStateException when was already executed
          */
-        private void execute() throws IllegalStateException {
+        private Transaction execute() throws IllegalStateException {
             if (executed) throw new IllegalStateException();
             if (originator != null) {
                 originator.addEntry(new Entry(originator,this, -amount, LocalDateTime.now()));
@@ -38,6 +38,7 @@ class TransactionManager {
                 beneficiary.addEntry(new Entry(beneficiary,this, amount, LocalDateTime.now()));
             }
             executed = true;
+            return this;
         }
 
         /**
@@ -45,7 +46,7 @@ class TransactionManager {
          *
          * @throws IllegalStateException when was already rolled back
          */
-        private void rollback() throws IllegalStateException {
+        private Transaction rollback() throws IllegalStateException {
             if (!executed || rolledBack) throw new IllegalStateException();
             if (originator != null) {
                 originator.addEntry(new Entry(originator,this, amount, LocalDateTime.now()));
@@ -54,6 +55,7 @@ class TransactionManager {
                 beneficiary.addEntry(new Entry(beneficiary,this, -amount, LocalDateTime.now()));
             }
             rolledBack = true;
+            return this;
         }
 
         public long getId() {
@@ -73,7 +75,7 @@ class TransactionManager {
         }
     }
 
-    private HashMap<Account, LinkedList<Transaction>> transactionsMap;
+    private HashMap<Account, ArrayList<Transaction>> transactionsMap;
     private long nextTransactionId;
 
     TransactionManager() {
@@ -83,10 +85,10 @@ class TransactionManager {
 
     public Transaction createTransaction(double amount, Account originator, Account beneficiary) {
         if (originator != null && !transactionsMap.containsKey(originator)) {
-            transactionsMap.put(originator, new LinkedList<>());
+            transactionsMap.put(originator, new ArrayList<>());
         }
         if (beneficiary != null && !transactionsMap.containsKey(beneficiary)) {
-            transactionsMap.put(beneficiary, new LinkedList<>());
+            transactionsMap.put(beneficiary, new ArrayList<>());
         }
         return new Transaction(nextTransactionId++, amount, originator, beneficiary);
     }
@@ -124,6 +126,4 @@ class TransactionManager {
         if (transaction.originator != null) transactionsMap.get(transaction.originator).add(transaction);
         return true;
     }
-
-
 }
