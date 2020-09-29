@@ -4,6 +4,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class AccountTest {
@@ -13,8 +17,8 @@ class AccountTest {
 
     @BeforeEach
     void beforeTest() {
-        accountFirst = new Account(1);
-        accountSecond = new Account(2);
+        accountFirst = new Account(1, new TransactionManager());
+        accountSecond = new Account(2, new TransactionManager());
     }
 
     @Test
@@ -168,5 +172,113 @@ class AccountTest {
         // then
         assertEquals(4, valueFirst);
         assertEquals(2, valueSecond);
+    }
+
+    @Test
+    void history_checkDateFrom() {
+        // given
+        TransactionManager.Transaction transaction = new TransactionManager().createTransaction(10, null, null);
+        accountFirst.addEntry(new Entry(accountFirst, transaction, 4, LocalDateTime.now().minusDays(1)));
+        accountFirst.addEntry(new Entry(accountFirst, transaction, 1, LocalDateTime.now()));
+        accountFirst.addEntry(new Entry(accountFirst, transaction, 2, LocalDateTime.now()));
+        accountFirst.addEntry(new Entry(accountFirst, transaction, 3, LocalDateTime.now().plusDays(1)));
+
+        // when
+        ArrayList<Entry> resultList = new ArrayList<>(accountFirst.history(LocalDate.now(), null));
+        Entry firstEntry = resultList.get(0);
+        Entry secondEntry = resultList.get(1);
+        Entry threeEntry = resultList.get(2);
+
+        // then
+        assertEquals(3, resultList.size());
+        assertEquals(1, firstEntry.getAmount());
+        assertEquals(2, secondEntry.getAmount());
+        assertEquals(3, threeEntry.getAmount());
+
+        // when
+        resultList = new ArrayList<>(accountFirst.history(LocalDate.now().plusDays(1), null));
+        firstEntry = resultList.get(0);
+
+        // then
+        assertEquals(1, resultList.size());
+        assertEquals(3, firstEntry.getAmount());
+    }
+
+    @Test
+    void history_checkDateTo() {
+        // given
+        TransactionManager.Transaction transaction = new TransactionManager().createTransaction(10, null, null);
+        accountFirst.addEntry(new Entry(accountFirst, transaction, 4, LocalDateTime.now().minusDays(1)));
+        accountFirst.addEntry(new Entry(accountFirst, transaction, 1, LocalDateTime.now()));
+        accountFirst.addEntry(new Entry(accountFirst, transaction, 2, LocalDateTime.now()));
+        accountFirst.addEntry(new Entry(accountFirst, transaction, 3, LocalDateTime.now().plusDays(1)));
+
+        // when
+        ArrayList<Entry> resultList = new ArrayList<>(accountFirst.history(null, LocalDate.now()));
+        Entry firstEntry = resultList.get(0);
+
+        // then
+        assertEquals(1, resultList.size());
+        assertEquals(4, firstEntry.getAmount());
+
+        // when
+        resultList = new ArrayList<>(accountFirst.history(null, LocalDate.now().plusDays(1)));
+        firstEntry = resultList.get(0);
+        Entry secondEntry = resultList.get(1);
+        Entry threeEntry = resultList.get(2);
+
+        // then
+        assertEquals(3, resultList.size());
+        assertEquals(4, firstEntry.getAmount());
+        assertEquals(1, secondEntry.getAmount());
+        assertEquals(2, threeEntry.getAmount());
+    }
+
+    @Test
+    void history_checkDateToAndDateFrom() {
+        // given
+        TransactionManager.Transaction transaction = new TransactionManager().createTransaction(10, null, null);
+        accountFirst.addEntry(new Entry(accountFirst, transaction, 4, LocalDateTime.now().minusDays(1)));
+        accountFirst.addEntry(new Entry(accountFirst, transaction, 1, LocalDateTime.now()));
+        accountFirst.addEntry(new Entry(accountFirst, transaction, 2, LocalDateTime.now()));
+        accountFirst.addEntry(new Entry(accountFirst, transaction, 3, LocalDateTime.now().plusDays(1)));
+
+        // when
+        ArrayList<Entry> resultList = new ArrayList<>(accountFirst.history(LocalDate.now(), LocalDate.now().plusDays(1)));
+        Entry firstEntry = resultList.get(0);
+        Entry secondEntry = resultList.get(1);
+
+        // then
+        assertEquals(2, resultList.size());
+        assertEquals(1, firstEntry.getAmount());
+        assertEquals(2, secondEntry.getAmount());
+    }
+
+    @Test
+    void rollbackLastTransaction_whenTransactionsIsNotExists() {
+        // when
+        isSuccess = accountFirst.rollbackLastTransaction();
+        // then
+        assertFalse(isSuccess);
+    }
+
+    @Test
+    void rollbackLastTransaction_whenTransactionsIsExists() {
+        // given
+        accountFirst.addCash(10);
+        accountFirst.addCash(20);
+        accountFirst.addCash(30);
+        // when
+        isSuccess = accountFirst.rollbackLastTransaction();
+        valueSecond = accountFirst.balanceOn(null);
+        // then
+        assertTrue(isSuccess);
+        assertEquals(30, valueSecond);
+        // when
+        isSuccess = accountFirst.rollbackLastTransaction();
+        valueSecond = accountFirst.balanceOn(null);
+        // then
+        assertFalse(isSuccess);
+        assertEquals(30, valueSecond);
     }
 }
