@@ -8,13 +8,12 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AnalyticsManagerTest {
-    Account accountFirst, accountSecond, accountThird;
-    TransactionManager transactionManager;
-    AnalyticsManager analyticsManager;
+    private Account accountFirst, accountSecond, accountThird;
+    private AnalyticsManager analyticsManager;
 
     @BeforeEach
     void setUp() {
-        transactionManager = new TransactionManager();
+        TransactionManager transactionManager = new TransactionManager();
         accountFirst = new Account(1, transactionManager);
         accountSecond = new Account(2, transactionManager);
         accountThird = new Account(3, transactionManager);
