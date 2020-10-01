@@ -2,10 +2,6 @@ public class Account {
     private final long id;
     private double balance;
 
-    public double getBalance() {
-        return balance;
-    }
-
     public Account(long id) {
         this.id = id;
     }
@@ -34,5 +30,9 @@ public class Account {
         if (amount <= 0) return false;
         balance += amount;
         return true;
+    }
+
+    public double getBalance() {
+        return balance;
     }
 }

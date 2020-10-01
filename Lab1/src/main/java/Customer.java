@@ -1,5 +1,3 @@
-import java.util.Optional;
-
 public class Customer {
     private final String name;
     private final String lastName;
@@ -45,7 +43,7 @@ public class Customer {
      * @return concatenated form of name and lastName, e.g. "John Goodman"
      */
     public String fullName() {
-        return String.format("%s %s", defaultIfNotSet(name), defaultIfNotSet(lastName)).trim();
+        return String.format("%s %s", StringUtils.defaultString(name), StringUtils.defaultString(lastName)).trim();
     }
 
     /**
@@ -72,13 +70,5 @@ public class Customer {
             return false;
         }
         return account.add(amount);
-    }
-
-    private static String defaultIfNotSet (String string) {
-        if (string == null || string.isEmpty()){
-            return "";
-        } else {
-            return string;
-        }
     }
 }

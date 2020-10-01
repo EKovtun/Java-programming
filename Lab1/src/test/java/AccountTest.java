@@ -6,64 +6,71 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AccountTest {
-    Account account;
-    boolean isSuccess;
-
-    @BeforeEach
-    void setUp() {
-        account = new Account(1);
-    }
-
-    @AfterEach
-    void tearDown() {
-        account = null;
-    }
-
     @Test
-    @Order(1)
-    void add_whenAddedInvalidAmount() {
+    void add_whenAddedNegativeAmount() {
+        // given
+        Account account = new Account(1);
         // when
-        isSuccess = account.add(-10);
-        // then
-        assertFalse(isSuccess);
-        // when
-        isSuccess = account.add(0);
+        boolean isSuccess = account.add(-10);
         // then
         assertFalse(isSuccess);
     }
 
     @Test
-    @Order(2)
+    void add_whenAddedZeroAmount() {
+        // given
+        Account account = new Account(1);
+        // when
+        boolean isSuccess = account.add(0);
+        // then
+        assertFalse(isSuccess);
+    }
+
+    @Test
     void add_checkCorrectAdditionAmount() {
+        // given
+        Account account = new Account(1);
         // when
-        isSuccess = account.add(10.05);
+        boolean isSuccess = account.add(10.05);
         // then
         assertTrue(isSuccess);
         assertEquals(account.getBalance(), 10.05);
     }
 
     @Test
-    void withdraw_whenWithdrawInvalidAmount() {
+    void withdraw_whenWithdrawNegativeAmount() {
+        // given
+        Account account = new Account(1);
         // when
-        isSuccess = account.withdraw(-10);
+        boolean isSuccess = account.withdraw(-10);
         // then
         assertFalse(isSuccess);
+    }
+
+    @Test
+    void withdraw_whenWithdrawZeroAmount() {
+        // given
+        Account account = new Account(1);
         // when
-        isSuccess = account.withdraw(0);
+        boolean isSuccess = account.withdraw(0);
         // then
         assertFalse(isSuccess);
     }
 
     @Test
     void withdraw_whenBalanceIsNotEnoughToWithdraw() {
+        // given
+        Account account = new Account(1);
         // when
-        isSuccess = account.withdraw(10);
+        boolean isSuccess = account.withdraw(10);
         // then
         assertFalse(isSuccess);
     }
 
     @Test
     void withdraw_checkCorrectWithdrawAmount() {
+        // given
+        Account account = new Account(1);
         // when
         account.add(100.40);
         account.withdraw(60.20);

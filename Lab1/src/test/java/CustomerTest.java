@@ -1,20 +1,15 @@
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class CustomerTest {
-    boolean isSuccess;
-
     @Test
-    @Order(1)
     void openAccount_whenAccountIsNotExist() {
         // given
         Customer customer = new Customer("Ed", "Kv");
         // when
-        isSuccess = customer.openAccount(1);
+        boolean isSuccess = customer.openAccount(1);
         // then
         assertTrue(isSuccess);
     }
@@ -25,7 +20,7 @@ class CustomerTest {
         Customer customer = new Customer("Ed", "Kv");
         customer.openAccount(1);
         // when
-        isSuccess = customer.openAccount(2);
+        boolean isSuccess = customer.openAccount(2);
         // then
         assertFalse(isSuccess);
     }
@@ -35,7 +30,7 @@ class CustomerTest {
         // given
         Customer customer = new Customer("Ed", "Kv");
         // when
-        isSuccess = customer.closeAccount();
+        boolean isSuccess = customer.closeAccount();
         // then
         assertFalse(isSuccess);
     }
@@ -46,21 +41,27 @@ class CustomerTest {
         Customer customer = new Customer("Ed", "Kv");
         customer.openAccount(1);
         // when
-        isSuccess = customer.closeAccount();
+        boolean isSuccess = customer.closeAccount();
         // then
         assertTrue(isSuccess);
     }
 
     @Test
-    void addMoneyToCurrentAccount_whenAddedInvalidAmount() {
+    void addMoneyToCurrentAccount_whenAddedNegativeAmount() {
         // given
         Customer customer = new Customer("Ed", "Kv");
         // when
-        isSuccess = customer.addMoneyToCurrentAccount(-10);
+        boolean isSuccess = customer.addMoneyToCurrentAccount(-10);
         // then
         assertFalse(isSuccess);
+    }
+
+    @Test
+    void addMoneyToCurrentAccount_whenAddedZeroAmount() {
+        // given
+        Customer customer = new Customer("Ed", "Kv");
         // when
-        isSuccess = customer.addMoneyToCurrentAccount(0);
+        boolean isSuccess = customer.addMoneyToCurrentAccount(0);
         // then
         assertFalse(isSuccess);
     }
@@ -70,33 +71,38 @@ class CustomerTest {
         // given
         Customer customer = new Customer("Ed", "Kv");
         // when
-        isSuccess = customer.addMoneyToCurrentAccount(10);
+        boolean isSuccess = customer.addMoneyToCurrentAccount(10);
         // then
         assertFalse(isSuccess);
     }
 
     @Test
-    @Order(2)
     void addMoneyToCurrentAccount_whenAccountIsExist() {
         // given
         Customer customer = new Customer("Ed", "Kv");
         customer.openAccount(1);
         // when
-        isSuccess = customer.addMoneyToCurrentAccount(10);
+        boolean isSuccess = customer.addMoneyToCurrentAccount(10);
         // then
         assertTrue(isSuccess);
     }
 
     @Test
-    void withdrawFromCurrentAccount_whenWithdrawInvalidAmount() {
+    void withdrawFromCurrentAccount_whenWithdrawNegativeAmount() {
         // given
         Customer customer = new Customer("Ed", "Kv");
         // when
-        isSuccess = customer.withdrawFromCurrentAccount(-10);
+        boolean isSuccess = customer.withdrawFromCurrentAccount(-10);
         // then
         assertFalse(isSuccess);
+    }
+
+    @Test
+    void withdrawFromCurrentAccount_whenWithdrawZeroAmount() {
+        // given
+        Customer customer = new Customer("Ed", "Kv");
         // when
-        isSuccess = customer.withdrawFromCurrentAccount(0);
+        boolean isSuccess = customer.withdrawFromCurrentAccount(0);
         // then
         assertFalse(isSuccess);
     }
@@ -106,7 +112,7 @@ class CustomerTest {
         // given
         Customer customer = new Customer("Ed", "Kv");
         // when
-        isSuccess = customer.withdrawFromCurrentAccount(10);
+        boolean isSuccess = customer.withdrawFromCurrentAccount(10);
         // then
         assertFalse(isSuccess);
     }
@@ -119,7 +125,7 @@ class CustomerTest {
         customer.openAccount(1);
         customer.addMoneyToCurrentAccount(10);
         // when
-        isSuccess = customer.withdrawFromCurrentAccount(10);
+        boolean isSuccess = customer.withdrawFromCurrentAccount(10);
         // then
         assertTrue(isSuccess);
     }
@@ -135,56 +141,42 @@ class CustomerTest {
     }
 
     @Test
-    void fullName_whenNameOrLastNameIsEmpty() {
-        Customer customer;
-        String fullName;
-
+    void fullName_whenFirstNameIsEmpty() {
         // given
-        customer = new Customer("", "");
+        Customer customer = new Customer("", "Second");
         // when
-        fullName = customer.fullName();
+        String fullName = customer.fullName();
         // then
-        assertEquals(fullName, "");
-
-        // given
-        customer = new Customer("Ed", "");
-        // when
-        fullName = customer.fullName();
-        // then
-        assertEquals(fullName, "Ed");
-
-        // given
-        customer = new Customer("", "Kv");
-        // when
-        fullName = customer.fullName();
-        // then
-        assertEquals(fullName, "Kv");
+        assertEquals(fullName, "Second");
     }
 
     @Test
-    void fullName_whenNameOrLastNameIsNull() {
-        Customer customer;
-        String fullName;
-
+    void fullName_whenFirstNameIsNull() {
         // given
-        customer = new Customer(null, null);
+        Customer customer = new Customer(null, "Second");
         // when
-        fullName = customer.fullName();
+        String fullName = customer.fullName();
         // then
-        assertEquals(fullName, "");
+        assertEquals(fullName, "Second");
+    }
 
+    @Test
+    void fullName_whenSecondNameIsEmpty() {
         // given
-        customer = new Customer("Ed", null);
+        Customer customer = new Customer("First", "");
         // when
-        fullName = customer.fullName();
+        String fullName = customer.fullName();
         // then
-        assertEquals(fullName, "Ed");
+        assertEquals(fullName, "First");
+    }
 
+    @Test
+    void fullName_whenSecondNameIsNull() {
         // given
-        customer = new Customer(null, "Kv");
+        Customer customer = new Customer("First", null);
         // when
-        fullName = customer.fullName();
+        String fullName = customer.fullName();
         // then
-        assertEquals(fullName, "Kv");
+        assertEquals(fullName, "First");
     }
 }
