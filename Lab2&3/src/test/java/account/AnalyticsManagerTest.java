@@ -8,15 +8,16 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AnalyticsManagerTest {
-    private Account accountFirst, accountSecond, accountThird;
+    private DebitCard accountFirst, accountSecond, accountThird;
     private AnalyticsManager analyticsManager;
 
     @BeforeEach
     void setUp() {
+        BonusAccount bonusAccount = new BonusAccount(0, new TransactionManager());
         TransactionManager transactionManager = new TransactionManager();
-        accountFirst = new Account(1, transactionManager);
-        accountSecond = new Account(2, transactionManager);
-        accountThird = new Account(3, transactionManager);
+        accountFirst = new DebitCard(1, bonusAccount, transactionManager);
+        accountSecond = new DebitCard(2, bonusAccount, transactionManager);
+        accountThird = new DebitCard(3, bonusAccount, transactionManager);
         accountFirst.addCash(1000);
         accountFirst.withdraw(100, accountSecond);
         accountFirst.withdraw(200, accountSecond);

@@ -6,9 +6,9 @@ import java.util.Map;
 
 public class SimpleEntitiesStorage<V> implements BankEntitiesStorage<V> {
     private final Map<Object, V> storage = new HashMap<>();
-    private final KeyExtractor<? super V> keyExtractor;
+    private final KeyExtractor<?, ? super V> keyExtractor;
 
-    public SimpleEntitiesStorage(KeyExtractor<? super V> keyExtractor) {
+    public SimpleEntitiesStorage(KeyExtractor<?, ? super V> keyExtractor) {
         this.keyExtractor = keyExtractor;
     }
 

@@ -1,5 +1,5 @@
 package storage;
 
-public interface KeyExtractor<V> {
-    <T extends V> Object extract(T entity);
+public interface KeyExtractor<K, V> {
+    <T extends V> K extract(T entity);
 }

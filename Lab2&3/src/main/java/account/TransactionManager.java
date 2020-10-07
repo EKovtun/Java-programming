@@ -126,4 +126,19 @@ class TransactionManager {
         if (transaction.originator != null) transactionsMap.get(transaction.originator).add(transaction);
         return true;
     }
+
+    public boolean executeTransactions(Transaction... transactions) {
+        LinkedList<Transaction> executedTransactionsList = new LinkedList<>();
+        for (Transaction transaction: transactions) {
+            if (transaction == null) continue;
+            if (!executeTransaction(transaction)) {
+                for (Transaction executedTransaction : executedTransactionsList) {
+                    rollbackTransaction(executedTransaction);
+                }
+            } else {
+                executedTransactionsList.push(transaction);
+            }
+        }
+        return true;
+    }
 }

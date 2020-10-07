@@ -1,5 +1,7 @@
 package account;
 
+import storage.AccountKeyExtractor;
+
 import java.util.*;
 
 public class AnalyticsManager {
@@ -51,4 +53,32 @@ public class AnalyticsManager {
 
         return result;
     }
+
+    public double overallBalanceOfAccounts(List<Account> accounts) {
+        double result = 0d;
+        for (Account account : accounts) {
+            if (account == null) continue;
+            result += account.balanceOn(null);
+        }
+        return result;
+    }
+
+    public <T extends Account> Set<Integer> uniqueKeysOf(List<T> accounts, AccountKeyExtractor extractor) {
+        Set<Integer> resultList = new TreeSet<>();
+        if (accounts == null || extractor == null) return resultList;
+        for(Account account : accounts) {
+            resultList.add(extractor.extract(account));
+        }
+        return resultList;
+    }
+
+    public <T extends Account> List<T> accountsRangeFrom(List<T> accounts, T minAccount, Comparator<T> comparator) {
+        if (accounts == null || comparator == null) return new ArrayList<>();
+        var resultList = new ArrayList<>(accounts);
+        resultList.sort(comparator);
+        int minAccountIndex = minAccount == null ? 0 : resultList.indexOf(minAccount);
+        resultList.subList(minAccountIndex, resultList.size() - 1);
+        return resultList;
+    }
+
 }
