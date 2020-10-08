@@ -43,7 +43,7 @@ public class DebitCard implements Account {
         if (amount <= 0 || balanceOn(null) - amount < 0) return false;
         var mainTransaction = transactionManager.createTransaction(
                 amount, this, beneficiary);
-        if (bonusAccount != null) {
+        if (bonusAccount != null && beneficiary != null) {
             var bonusTransaction = transactionManager.createTransaction(
                     amount * bonusAccount.getBonusPercentage() / 100, null, bonusAccount);
             return transactionManager.executeTransactions(mainTransaction, bonusTransaction);

@@ -342,7 +342,7 @@ class DebitCardTest {
         DebitCard accountFirst = new DebitCard(1, bonusAccount, new TransactionManager());
         accountFirst.addCash(startCashOnAccount);
         // when
-        accountFirst.withdraw(amountWithdraw, null);
+        accountFirst.withdraw(amountWithdraw, new DebitCard(2, null, new TransactionManager()));
         double bonuses = accountFirst.getBonuses(null);
         // then
         assertEquals(returnBonuses, bonuses);
