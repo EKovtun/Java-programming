@@ -2,8 +2,11 @@ package account;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import storage.AccountKeyExtractor;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,11 +16,10 @@ class AnalyticsManagerTest {
 
     @BeforeEach
     void setUp() {
-        BonusAccount bonusAccount = new BonusAccount(0, new TransactionManager());
         TransactionManager transactionManager = new TransactionManager();
-        accountFirst = new DebitCard(1, bonusAccount, transactionManager);
-        accountSecond = new DebitCard(2, bonusAccount, transactionManager);
-        accountThird = new DebitCard(3, bonusAccount, transactionManager);
+        accountFirst = new DebitCard(1, null, transactionManager);
+        accountSecond = new DebitCard(2, null, transactionManager);
+        accountThird = new DebitCard(3, null, transactionManager);
         accountFirst.addCash(1000);
         accountFirst.withdraw(100, accountSecond);
         accountFirst.withdraw(200, accountSecond);
@@ -76,5 +78,69 @@ class AnalyticsManagerTest {
         assertEquals(300, transaction1Amount);
         assertEquals(200, transaction2Amount);
         assertEquals(100, transaction3Amount);
+    }
+
+    @Test
+    void overallBalanceOfAccounts_whenAccountsIsNull() {
+        // when
+        double result = analyticsManager.overallBalanceOfAccounts(null);
+        // then
+        assertEquals(0d, result);
+    }
+
+    @Test
+    void overallBalanceOfAccounts_whenAccountsIsEmpty() {
+        // when
+        double result = analyticsManager.overallBalanceOfAccounts(new ArrayList<>());
+        // then
+        assertEquals(0d, result);
+    }
+
+    @Test
+    void overallBalanceOfAccounts_whenVariousAccountsIsNull() {
+        // given
+        accountFirst = new DebitCard(0, null, new TransactionManager());
+        accountSecond = new DebitCard(0, null, new TransactionManager());
+        accountThird = new DebitCard(0, null, new TransactionManager());
+        accountFirst.addCash(100);
+        accountSecond.addCash(100);
+        accountThird.addCash(100);
+        // when
+        List<Account> accounts = new ArrayList<>();
+        accounts.add(accountFirst);
+        accounts.add(null);
+        accounts.add(accountSecond);
+        accounts.add(null);
+        accounts.add(accountThird);
+        double result = analyticsManager.overallBalanceOfAccounts(accounts);
+        // then
+        assertEquals(300d, result);
+    }
+
+    @Test
+    void uniqueKeysOf_whenAccountsIsNull() {
+        // when
+        Set<Integer> keys = analyticsManager.uniqueKeysOf(null, new AccountKeyExtractor());
+        // then
+        assertEquals(0, keys.size());
+    }
+
+    @Test
+    void uniqueKeysOf_whenExtractorIsNull() {
+        // given
+        ArrayList<Account> accounts = new ArrayList<>();
+        accounts.add(new DebitCard(0, null, new TransactionManager()));
+        // when
+        Set<Integer> keys = analyticsManager.uniqueKeysOf(accounts, null);
+        // then
+        assertEquals(0, keys.size());
+    }
+
+    @Test
+    void uniqueKeysOf_whenAccountsIsEmpty() {
+        // when
+        Set<Integer> keys = analyticsManager.uniqueKeysOf(new ArrayList<>(), new AccountKeyExtractor());
+        // then
+        assertEquals(0, keys.size());
     }
 }

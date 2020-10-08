@@ -14,11 +14,13 @@ public class SimpleEntitiesStorage<V> implements BankEntitiesStorage<V> {
 
     @Override
     public <T extends V> void save(T entity) {
+        if (entity == null) return;
         storage.put(keyExtractor.extract(entity), entity);
     }
 
     @Override
     public void saveAll(Collection<? extends V> entities) {
+        if (entities == null) return;
         for (V entity : entities) {
             save(entity);
         }

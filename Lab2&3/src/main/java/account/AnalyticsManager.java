@@ -1,6 +1,7 @@
 package account;
 
 import storage.AccountKeyExtractor;
+import storage.KeyExtractor;
 
 import java.util.*;
 
@@ -55,6 +56,7 @@ public class AnalyticsManager {
     }
 
     public double overallBalanceOfAccounts(List<Account> accounts) {
+        if (accounts == null) return 0d;
         double result = 0d;
         for (Account account : accounts) {
             if (account == null) continue;
@@ -63,8 +65,8 @@ public class AnalyticsManager {
         return result;
     }
 
-    public <T extends Account> Set<Integer> uniqueKeysOf(List<T> accounts, AccountKeyExtractor extractor) {
-        Set<Integer> resultList = new TreeSet<>();
+    public <R extends Comparable<? super R>, T extends Account> Set<R> uniqueKeysOf(List<T> accounts, KeyExtractor<R, Account> extractor) {
+        Set<R> resultList = new TreeSet<>();
         if (accounts == null || extractor == null) return resultList;
         for(Account account : accounts) {
             resultList.add(extractor.extract(account));

@@ -6,7 +6,7 @@ import java.util.*;
 /**
  * Manages all transactions within the application
  */
-class TransactionManager {
+public class TransactionManager {
     public static class Transaction {
         private final long id;
         private final double amount;
@@ -78,7 +78,7 @@ class TransactionManager {
     private HashMap<Account, ArrayList<Transaction>> transactionsMap;
     private long nextTransactionId;
 
-    TransactionManager() {
+    public TransactionManager() {
         transactionsMap = new HashMap<>();
         nextTransactionId = 0;
     }

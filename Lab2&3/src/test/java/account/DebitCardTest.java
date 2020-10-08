@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class AccountTest {
+class DebitCardTest {
     @Test
     void balanceOn_whenAccountIsNew() {
         // given

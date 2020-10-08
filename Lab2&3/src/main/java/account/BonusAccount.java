@@ -2,12 +2,12 @@ package account;
 
 import java.time.LocalDate;
 
-class BonusAccount implements Account {
+public class BonusAccount implements Account {
     private final double bonusPercentage;
     private final TransactionManager transactionManager;
     private final Entries entries = new Entries();
 
-    BonusAccount(double bonusPercentage, TransactionManager transactionManager) throws IllegalArgumentException {
+    public BonusAccount(double bonusPercentage, TransactionManager transactionManager) throws IllegalArgumentException {
         if (bonusPercentage <= 0 || transactionManager == null) throw new IllegalArgumentException();
         this.bonusPercentage = bonusPercentage;
         this.transactionManager = transactionManager;
