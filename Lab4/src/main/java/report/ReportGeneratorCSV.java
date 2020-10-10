@@ -32,14 +32,16 @@ public class ReportGeneratorCSV<T> implements ReportGenerator<T> {
     @Override
     public ReportCSV generateOnlyAnnotation(List<? extends T> entities) {
         if (entities == null || entities.isEmpty()) return new ReportCSV(new byte[0]);
-        ArrayList<Field> reportedFields = new ArrayList<>(getReportedFieldsForClass(clazz, true));
+        ArrayList<Field> reportedFields = new ArrayList<>(
+                ReportUtils.getReportedFieldsForClass(clazz, true));
         return generate(entities, reportedFields);
     }
 
     @Override
     public Report generateWithAllFields(List<? extends T> entities) {
         if (entities == null || entities.isEmpty()) return new ReportCSV(new byte[0]);
-        ArrayList<Field> reportedFields = new ArrayList<>(getReportedFieldsForClass(clazz, false));
+        ArrayList<Field> reportedFields = new ArrayList<>(
+                ReportUtils.getReportedFieldsForClass(clazz, false));
         return generate(entities, reportedFields);
     }
 
@@ -53,7 +55,7 @@ public class ReportGeneratorCSV<T> implements ReportGenerator<T> {
         if (reportedFields == null || reportedFields.isEmpty()) return new ReportCSV(new byte[0]);
 
         StringBuilder builder = new StringBuilder();
-        builder.append(String.join(", ", getReportedFieldsNames(reportedFields)));
+        builder.append(String.join(",", ReportUtils.getReportedFieldsNames(reportedFields, fieldsNamesMap)));
 
         ArrayList<String> valuesOfFields = new ArrayList<>();
         valuesOfFields.ensureCapacity(reportedFields.size());
@@ -70,58 +72,9 @@ public class ReportGeneratorCSV<T> implements ReportGenerator<T> {
                 }
             }
 
-            builder.append('\n').append(String.join(", ", valuesOfFields));
+            builder.append('\n').append(String.join(",", valuesOfFields));
         }
 
         return new ReportCSV(builder.toString().getBytes());
-    }
-
-    /**
-     * Получить имена репорт-полей
-     * @param reportedFields Репорт-поля
-     * @return Имена репорт-полей
-     */
-    private ArrayList<String> getReportedFieldsNames(ArrayList<Field> reportedFields) {
-        if (reportedFields == null || reportedFields.isEmpty()) return new ArrayList<>();
-        ArrayList<String> reportedNames = new ArrayList<>();
-
-        for(Field field : reportedFields) {
-            String fieldName = field.getName();
-            String replaceFieldName = fieldsNamesMap.get(fieldName);
-            if (replaceFieldName != null) {
-                reportedNames.add(replaceFieldName);
-            } else if (field.isAnnotationPresent(Reported.class)
-                    && !field.getAnnotation(Reported.class).reportFieldName().trim().isEmpty()) {
-                reportedNames.add(field.getAnnotation(Reported.class).reportFieldName().trim());
-            } else {
-                reportedNames.add(fieldName);
-            }
-        }
-
-        return reportedNames;
-    }
-
-    /**
-     * Получить репорт-поля для класса
-     * @param clazz Класс, с которого требуется получить репорт-поля
-     * @param withAnnotation Возврат только репорт-полей с аннотацией <code>@Reported</code>
-     * @return Репорт-поля
-     */
-    private ArrayList<Field> getReportedFieldsForClass(Class<?> clazz, boolean withAnnotation) {
-        if (clazz == null) return new ArrayList<>();
-        ArrayList<Field> fields = new ArrayList<>();
-        int insertIndex = 0;
-
-        while (clazz != null) {
-            for (var field : clazz.getDeclaredFields()) {
-                if (!withAnnotation || field.isAnnotationPresent(Reported.class)) {
-                    fields.add(insertIndex++, field);
-                }
-            }
-            clazz = clazz.getSuperclass();
-            insertIndex = 0;
-        }
-
-        return fields;
     }
 }

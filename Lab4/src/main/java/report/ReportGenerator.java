@@ -1,7 +1,8 @@
 package report;
+
 import java.util.List;
 
-interface ReportGenerator<T> {
+ interface ReportGenerator<T> {
     /**
      * Генерация значений только для полей с аннотацией <code>@Reported</code>
      * @param entities Объекты класса генерации
