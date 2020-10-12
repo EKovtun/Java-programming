@@ -12,16 +12,14 @@ class ReportUtils {
      * @return Репорт-поля
      */
     static ArrayList<Field> getReportedFieldsForClass(Class<?> clazz, boolean onlyWithAnnotation) {
-        if (clazz == null) return new ArrayList<>();
         ArrayList<Field> fields = new ArrayList<>();
         int insertIndex = 0;
 
         while (clazz != null) {
-            for (var field : clazz.getDeclaredFields()) {
-                if (!onlyWithAnnotation || field.isAnnotationPresent(Reported.class)) {
+            for (var field : clazz.getDeclaredFields())
+                if (!onlyWithAnnotation || field.isAnnotationPresent(Reported.class))
                     fields.add(insertIndex++, field);
-                }
-            }
+
             clazz = clazz.getSuperclass();
             insertIndex = 0;
         }
@@ -36,7 +34,7 @@ class ReportUtils {
      * @return Имена репорт-полей
      */
     static ArrayList<String> getReportedFieldsNames(ArrayList<Field> reportedFields, Map<String, String> fieldsNamesMap) {
-        if (reportedFields == null || reportedFields.isEmpty()) return new ArrayList<>();
+        if (reportedFields == null) return new ArrayList<>();
         ArrayList<String> reportedNames = new ArrayList<>();
 
         for(Field field : reportedFields) {
