@@ -12,7 +12,7 @@ class DebitCardTest {
     @Test
     void balanceOn_whenAccountIsNew() {
         // given
-        DebitCard accountFirst = new DebitCard(1, null, new TransactionManager());
+        DebitCard accountFirst = new DebitCard(null, new TransactionManager());
         // when
         double valueFirst = accountFirst.balanceOn(null);
         // then
@@ -22,7 +22,7 @@ class DebitCardTest {
     @Test
     void addCash_whenAmountIsNegative() {
         // given
-        DebitCard accountFirst = new DebitCard(1, null, new TransactionManager());
+        DebitCard accountFirst = new DebitCard(null, new TransactionManager());
         // when
         boolean isSuccess = accountFirst.addCash(-5);
         // then
@@ -36,7 +36,7 @@ class DebitCardTest {
     @Test
     void addCash_whenAmountIsZero() {
         // given
-        DebitCard accountFirst = new DebitCard(1, null, new TransactionManager());
+        DebitCard accountFirst = new DebitCard(null, new TransactionManager());
         // when
         boolean isSuccess = accountFirst.addCash(0);
         // then
@@ -46,7 +46,7 @@ class DebitCardTest {
     @Test
     void addCashAndBalanceOn_whenAmountIsValid() {
         // given
-        DebitCard accountFirst = new DebitCard(1, null, new TransactionManager());
+        DebitCard accountFirst = new DebitCard(null, new TransactionManager());
         // when
         boolean isSuccess = accountFirst.addCash(50);
         double valueFirst = accountFirst.balanceOn(null);
@@ -64,7 +64,7 @@ class DebitCardTest {
     @Test
     void withdrawCash_whenAmountIsNegative() {
         // given
-        DebitCard accountFirst = new DebitCard(1, null, new TransactionManager());
+        DebitCard accountFirst = new DebitCard(null, new TransactionManager());
         // when
         boolean isSuccess = accountFirst.withdrawCash(-5);
         // then
@@ -78,7 +78,7 @@ class DebitCardTest {
     @Test
     void withdrawCash_whenAmountIsZero() {
         // given
-        DebitCard accountFirst = new DebitCard(1, null, new TransactionManager());
+        DebitCard accountFirst = new DebitCard(null, new TransactionManager());
         // when
         boolean isSuccess = accountFirst.withdrawCash(0);
         // then
@@ -88,7 +88,7 @@ class DebitCardTest {
     @Test
     void withdrawCash_whenAmountIsValid() {
         // given
-        DebitCard accountFirst = new DebitCard(1, null, new TransactionManager());
+        DebitCard accountFirst = new DebitCard(null, new TransactionManager());
         accountFirst.addCash(50);
         // when
         boolean isSuccess = accountFirst.withdrawCash(20);
@@ -107,7 +107,7 @@ class DebitCardTest {
     @Test
     void withdrawCash_whenBalanceIsNotEnough() {
         // given
-        DebitCard accountFirst = new DebitCard(1, null, new TransactionManager());
+        DebitCard accountFirst = new DebitCard(null, new TransactionManager());
         accountFirst.addCash(50);
         // when
         boolean isSuccess = accountFirst.withdrawCash(51);
@@ -118,7 +118,7 @@ class DebitCardTest {
     @Test
     void withdraw_whenAmountIsNegative() {
         // given
-        DebitCard accountFirst = new DebitCard(1, null, new TransactionManager());
+        DebitCard accountFirst = new DebitCard(null, new TransactionManager());
         // when
         boolean isSuccess = accountFirst.withdraw(-5, null);
         // then
@@ -128,7 +128,7 @@ class DebitCardTest {
     @Test
     void withdraw_whenAmountIsZero() {
         // given
-        DebitCard accountFirst = new DebitCard(1, null, new TransactionManager());
+        DebitCard accountFirst = new DebitCard(null, new TransactionManager());
         // when
         boolean isSuccess = accountFirst.withdraw(0, null);
         // then
@@ -138,7 +138,7 @@ class DebitCardTest {
     @Test
     void withdraw_whenAmountIsValid() {
         // given
-        DebitCard accountFirst = new DebitCard(1, null, new TransactionManager());
+        DebitCard accountFirst = new DebitCard(null, new TransactionManager());
         accountFirst.addCash(50);
         // when
         boolean isSuccess = accountFirst.withdraw(20, null);
@@ -157,7 +157,7 @@ class DebitCardTest {
     @Test
     void withdraw_whenBalanceIsNotEnough() {
         // given
-        DebitCard accountFirst = new DebitCard(1, null, new TransactionManager());
+        DebitCard accountFirst = new DebitCard(null, new TransactionManager());
         accountFirst.addCash(50);
         // when
         boolean isSuccess = accountFirst.withdraw(51, null);
@@ -168,8 +168,8 @@ class DebitCardTest {
     @Test
     void withdraw_checkBalanceOnBothAccounts() {
         // given
-        DebitCard accountFirst = new DebitCard(1, null, new TransactionManager());
-        DebitCard accountSecond = new DebitCard(2, null, new TransactionManager());
+        DebitCard accountFirst = new DebitCard(null, new TransactionManager());
+        DebitCard accountSecond = new DebitCard(null, new TransactionManager());
         accountFirst.addCash(50);
         accountSecond.addCash(100);
         // when
@@ -185,8 +185,8 @@ class DebitCardTest {
     @Test
     void history_whenFromAndToIsNotSet() {
         // given
-        DebitCard accountFirst = new DebitCard(1, null, new TransactionManager());
-        DebitCard accountSecond = new DebitCard(2, null, new TransactionManager());
+        DebitCard accountFirst = new DebitCard(null, new TransactionManager());
+        DebitCard accountSecond = new DebitCard(null, new TransactionManager());
         // when
         int valueFirst = accountFirst.history(null, null).size();
         // then
@@ -207,7 +207,7 @@ class DebitCardTest {
     @Test
     void history_checkDateFrom() {
         // given
-        DebitCard accountFirst = new DebitCard(1, null, new TransactionManager());
+        DebitCard accountFirst = new DebitCard(null, new TransactionManager());
         TransactionManager.Transaction transaction = new TransactionManager().createTransaction(10, null, null);
         accountFirst.addEntry(new Entry(accountFirst, transaction, 4, LocalDateTime.now().minusDays(1)));
         accountFirst.addEntry(new Entry(accountFirst, transaction, 1, LocalDateTime.now()));
@@ -238,7 +238,7 @@ class DebitCardTest {
     @Test
     void history_checkDateTo() {
         // given
-        DebitCard accountFirst = new DebitCard(1, null, new TransactionManager());
+        DebitCard accountFirst = new DebitCard(null, new TransactionManager());
         TransactionManager.Transaction transaction = new TransactionManager().createTransaction(10, null, null);
         accountFirst.addEntry(new Entry(accountFirst, transaction, 4, LocalDateTime.now().minusDays(1)));
         accountFirst.addEntry(new Entry(accountFirst, transaction, 1, LocalDateTime.now()));
@@ -269,7 +269,7 @@ class DebitCardTest {
     @Test
     void history_checkDateToAndDateFrom() {
         // given
-        DebitCard accountFirst = new DebitCard(1, null, new TransactionManager());
+        DebitCard accountFirst = new DebitCard(null, new TransactionManager());
         TransactionManager.Transaction transaction = new TransactionManager().createTransaction(10, null, null);
         accountFirst.addEntry(new Entry(accountFirst, transaction, 4, LocalDateTime.now().minusDays(1)));
         accountFirst.addEntry(new Entry(accountFirst, transaction, 1, LocalDateTime.now()));
@@ -290,7 +290,7 @@ class DebitCardTest {
     @Test
     void rollbackLastTransaction_whenTransactionsIsNotExists() {
         // given
-        DebitCard accountFirst = new DebitCard(1, null, new TransactionManager());
+        DebitCard accountFirst = new DebitCard(null, new TransactionManager());
         // when
         boolean isSuccess = accountFirst.rollbackLastTransaction();
         // then
@@ -300,7 +300,7 @@ class DebitCardTest {
     @Test
     void rollbackLastTransaction_whenTransactionsIsExists() {
         // given
-        DebitCard accountFirst = new DebitCard(1, null, new TransactionManager());
+        DebitCard accountFirst = new DebitCard(null, new TransactionManager());
         accountFirst.addCash(10);
         accountFirst.addCash(20);
         accountFirst.addCash(30);
@@ -322,7 +322,7 @@ class DebitCardTest {
     @Test
     void getBonuses_whenWithdrawAndBonusAccountIsNotExist() {
         // given
-        DebitCard accountFirst = new DebitCard(1, null, new TransactionManager());
+        DebitCard accountFirst = new DebitCard(null, new TransactionManager());
         accountFirst.addCash(100);
         // when
         accountFirst.withdraw(50, null);
@@ -339,10 +339,10 @@ class DebitCardTest {
         double returnBonuses = 200d;
         // given
         BonusAccount bonusAccount = new BonusAccount(bonusPercentage, new TransactionManager());
-        DebitCard accountFirst = new DebitCard(1, bonusAccount, new TransactionManager());
+        DebitCard accountFirst = new DebitCard(bonusAccount, new TransactionManager());
         accountFirst.addCash(startCashOnAccount);
         // when
-        accountFirst.withdraw(amountWithdraw, new DebitCard(2, null, new TransactionManager()));
+        accountFirst.withdraw(amountWithdraw, new DebitCard(null, new TransactionManager()));
         double bonuses = accountFirst.getBonuses(null);
         // then
         assertEquals(returnBonuses, bonuses);

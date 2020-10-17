@@ -1,6 +1,7 @@
 package account;
 
 import java.time.LocalDate;
+import java.util.Collection;
 
 public class BonusAccount implements Account {
     private final double bonusPercentage;
@@ -29,5 +30,10 @@ public class BonusAccount implements Account {
     @Override
     public void addEntry(Entry entry) {
         entries.addEntry(entry);
+    }
+
+    @Override
+    public Collection<Entry> getEntries(LocalDate from, LocalDate to) {
+        return entries.betweenDates(from, to);
     }
 }

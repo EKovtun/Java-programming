@@ -19,7 +19,7 @@ class SimpleEntitiesStorageTest {
         // given
         SimpleEntitiesStorage<Account> storage = new SimpleEntitiesStorage<>(new AccountKeyExtractor());
         BonusAccount bonusAccount = new BonusAccount(10, new TransactionManager());
-        DebitCard debitCard = new DebitCard(0, bonusAccount, new TransactionManager());
+        DebitCard debitCard = new DebitCard(bonusAccount, new TransactionManager());
         // when
         storage.save(bonusAccount);
         storage.save(debitCard);
@@ -50,7 +50,7 @@ class SimpleEntitiesStorageTest {
         // given
         SimpleEntitiesStorage<Account> storage = new SimpleEntitiesStorage<>(new AccountKeyExtractor());
         BonusAccount bonusAccount = new BonusAccount(10, new TransactionManager());
-        DebitCard debitCard = new DebitCard(0, bonusAccount, new TransactionManager());
+        DebitCard debitCard = new DebitCard(bonusAccount, new TransactionManager());
         // when
         LinkedList<Account> accountsList = new LinkedList<>();
         accountsList.push(bonusAccount);
@@ -83,7 +83,7 @@ class SimpleEntitiesStorageTest {
         // given
         SimpleEntitiesStorage<Account> storage = new SimpleEntitiesStorage<>(new AccountKeyExtractor());
         BonusAccount bonusAccount = new BonusAccount(10, new TransactionManager());
-        DebitCard debitCard = new DebitCard(0, bonusAccount, new TransactionManager());
+        DebitCard debitCard = new DebitCard(bonusAccount, new TransactionManager());
         // when
         LinkedList<Account> accountsList = new LinkedList<>();
         accountsList.push(null);
@@ -108,7 +108,7 @@ class SimpleEntitiesStorageTest {
         AccountKeyExtractor keyExtractor = new AccountKeyExtractor();
         SimpleEntitiesStorage<Account> storage = new SimpleEntitiesStorage<>(keyExtractor);
         BonusAccount bonusAccount = new BonusAccount(10, new TransactionManager());
-        DebitCard debitCard = new DebitCard(0, bonusAccount, new TransactionManager());
+        DebitCard debitCard = new DebitCard(bonusAccount, new TransactionManager());
         storage.save(bonusAccount);
         storage.save(debitCard);
         // when
@@ -124,7 +124,7 @@ class SimpleEntitiesStorageTest {
         // given
         SimpleEntitiesStorage<Account> storage = new SimpleEntitiesStorage<>(new AccountKeyExtractor());
         BonusAccount bonusAccount = new BonusAccount(10, new TransactionManager());
-        DebitCard debitCard = new DebitCard(0, bonusAccount, new TransactionManager());
+        DebitCard debitCard = new DebitCard(bonusAccount, new TransactionManager());
         storage.save(bonusAccount);
         storage.save(debitCard);
         // when
@@ -139,7 +139,7 @@ class SimpleEntitiesStorageTest {
         AccountKeyExtractor keyExtractor = new AccountKeyExtractor();
         SimpleEntitiesStorage<Account> storage = new SimpleEntitiesStorage<>(new AccountKeyExtractor());
         BonusAccount bonusAccount = new BonusAccount(10, new TransactionManager());
-        DebitCard debitCard = new DebitCard(0, bonusAccount, new TransactionManager());
+        DebitCard debitCard = new DebitCard(bonusAccount, new TransactionManager());
         storage.save(bonusAccount);
         storage.save(debitCard);
         // when
@@ -155,7 +155,7 @@ class SimpleEntitiesStorageTest {
         // given
         SimpleEntitiesStorage<Account> storage = new SimpleEntitiesStorage<>(new AccountKeyExtractor());
         BonusAccount bonusAccount = new BonusAccount(10, new TransactionManager());
-        DebitCard debitCard = new DebitCard(0, bonusAccount, new TransactionManager());
+        DebitCard debitCard = new DebitCard(bonusAccount, new TransactionManager());
         storage.save(bonusAccount);
         storage.save(debitCard);
         // when
@@ -186,7 +186,7 @@ class SimpleEntitiesStorageTest {
         AccountKeyExtractor keyExtractor = new AccountKeyExtractor();
         SimpleEntitiesStorage<Account> storage = new SimpleEntitiesStorage<>(keyExtractor);
         BonusAccount bonusAccount = new BonusAccount(10, new TransactionManager());
-        DebitCard debitCard = new DebitCard(0, bonusAccount, new TransactionManager());
+        DebitCard debitCard = new DebitCard(bonusAccount, new TransactionManager());
         storage.save(bonusAccount);
         storage.save(debitCard);
         // when
@@ -207,7 +207,7 @@ class SimpleEntitiesStorageTest {
         AccountKeyExtractor keyExtractor = new AccountKeyExtractor();
         SimpleEntitiesStorage<Account> storage = new SimpleEntitiesStorage<>(keyExtractor);
         BonusAccount bonusAccount = new BonusAccount(10, new TransactionManager());
-        DebitCard debitCard = new DebitCard(0, bonusAccount, new TransactionManager());
+        DebitCard debitCard = new DebitCard(bonusAccount, new TransactionManager());
         storage.save(bonusAccount);
         storage.save(debitCard);
         // when
@@ -228,7 +228,7 @@ class SimpleEntitiesStorageTest {
         AccountKeyExtractor keyExtractor = new AccountKeyExtractor();
         SimpleEntitiesStorage<Account> storage = new SimpleEntitiesStorage<>(keyExtractor);
         BonusAccount bonusAccount = new BonusAccount(10, new TransactionManager());
-        DebitCard debitCard = new DebitCard(0, bonusAccount, new TransactionManager());
+        DebitCard debitCard = new DebitCard(bonusAccount, new TransactionManager());
         storage.save(bonusAccount);
         storage.save(debitCard);
         // when
@@ -249,9 +249,9 @@ class SimpleEntitiesStorageTest {
         AccountKeyExtractor keyExtractor = new AccountKeyExtractor();
         SimpleEntitiesStorage<Account> storage = new SimpleEntitiesStorage<>(keyExtractor);
         BonusAccount bonusAccount = new BonusAccount(10, new TransactionManager());
-        DebitCard debitCard = new DebitCard(0, bonusAccount, new TransactionManager());
+        DebitCard debitCard = new DebitCard(bonusAccount, new TransactionManager());
         BonusAccount bonusAccount2 = new BonusAccount(10, new TransactionManager());
-        DebitCard debitCard2 = new DebitCard(0, bonusAccount2, new TransactionManager());
+        DebitCard debitCard2 = new DebitCard(bonusAccount2, new TransactionManager());
         storage.save(bonusAccount);
         storage.save(debitCard);
         storage.save(bonusAccount2);

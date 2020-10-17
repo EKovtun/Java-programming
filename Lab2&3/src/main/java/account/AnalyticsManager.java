@@ -1,9 +1,11 @@
 package account;
 
-import storage.AccountKeyExtractor;
 import storage.KeyExtractor;
 
+import java.time.LocalDate;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class AnalyticsManager {
     private final TransactionManager transactionManager;
@@ -15,72 +17,63 @@ public class AnalyticsManager {
 
     public Account mostFrequentBeneficiaryOfAccount(Account account) throws IllegalArgumentException {
         if (account == null) throw new IllegalArgumentException();
-        // без стримов
-        Map<Account, Integer> accountsCounters = new HashMap<>();
-        int max = 0;
-        Account maxAccount = null;
 
-        for(var transaction : transactionManager.findAllTransactionsByAccount(account)) {
-            Account beneficiary = transaction.getBeneficiary();
-            if (!accountsCounters.containsKey(beneficiary)) {
-                accountsCounters.put(beneficiary, 0);
-            }
-            Integer currentValue = accountsCounters.get(beneficiary);
-            currentValue += 1;
-            accountsCounters.put(beneficiary, currentValue);
+        var result =  transactionManager.findAllTransactionsByAccount(account)
+                .stream()
+                .map(TransactionManager.Transaction::getBeneficiary)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .entrySet()
+                .stream()
+                .max(Map.Entry.comparingByValue())
+                .orElse(null);
 
-            if (currentValue > max) {
-                max = currentValue;
-                maxAccount = beneficiary;
-            }
-        }
-
-        return maxAccount;
+        if (result != null)
+            return result.getKey();
+        else
+            return null;
     }
 
     public Collection<TransactionManager.Transaction> topTenExpensivePurchases(Account account) throws IllegalArgumentException {
         if (account == null) throw new IllegalArgumentException();
-        // без стримов
-        List<TransactionManager.Transaction> result = new ArrayList<>();
-        LinkedList<TransactionManager.Transaction> transactions = new LinkedList<>(transactionManager.findAllTransactionsByAccount(account));
-        transactions.sort(Comparator.comparing(TransactionManager.Transaction::getAmount));
 
-        Iterator<TransactionManager.Transaction> iterator = transactions.descendingIterator();
-        for(int i = 0; i < 10 && iterator.hasNext(); ++i) {
-            var transaction = iterator.next();
-            if (transaction.getOriginator() != account) continue;
-            result.add(transaction);
-        }
-
-        return result;
+        return account.getEntries(null, null).stream()
+                .sorted(Comparator.comparing(Entry::getAmount))
+                .filter(entry -> entry.getAmount() < 0)
+                .limit(10)
+                .map(Entry::getTransaction)
+                .collect(Collectors.toList());
     }
 
     public double overallBalanceOfAccounts(List<Account> accounts) {
         if (accounts == null) return 0d;
-        double result = 0d;
-        for (Account account : accounts) {
-            if (account == null) continue;
-            result += account.balanceOn(null);
-        }
-        return result;
+        return accounts.stream()
+                .filter(Objects::nonNull)
+                .mapToDouble(account -> account.balanceOn(null))
+                .sum();
+    }
+
+    public Optional<Entry> maxExpenseAmountEntryWithinInterval(List<Account> accounts, LocalDate from, LocalDate to) {
+        if (accounts == null) return Optional.empty();
+        return accounts.stream()
+                .filter(Objects::nonNull)
+                .map(account -> account.getEntries(from, to))
+                .flatMap(Collection::stream)
+                .filter(entry -> entry.getAmount() < 0)
+                .min(Comparator.comparing(Entry::getAmount));
     }
 
     public <R extends Comparable<? super R>, T extends Account> Set<R> uniqueKeysOf(List<T> accounts, KeyExtractor<R, Account> extractor) {
-        Set<R> resultList = new TreeSet<>();
-        if (accounts == null || extractor == null) return resultList;
-        for(Account account : accounts) {
-            resultList.add(extractor.extract(account));
-        }
-        return resultList;
+        if (accounts == null || extractor == null) return new TreeSet<>();
+        return accounts.stream().map(extractor::extract).collect(Collectors.toSet());
     }
 
     public <T extends Account> List<T> accountsRangeFrom(List<T> accounts, T minAccount, Comparator<T> comparator) {
         if (accounts == null || comparator == null) return new ArrayList<>();
-        var resultList = new ArrayList<>(accounts);
-        resultList.sort(comparator);
-        int minAccountIndex = minAccount == null ? 0 : resultList.indexOf(minAccount);
-        resultList.subList(minAccountIndex, resultList.size() - 1);
-        return resultList;
+        return accounts.stream()
+                .filter(account -> {
+                    if (account == null) return false;
+                    else return comparator.compare(minAccount, account) >= 0;
+                })
+                .collect(Collectors.toList());
     }
-
 }

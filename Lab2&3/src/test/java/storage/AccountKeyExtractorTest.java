@@ -11,7 +11,7 @@ class AccountKeyExtractorTest {
     @Test
     void extract() {
         // given
-        DebitCard accout = new DebitCard(0, null, new TransactionManager());
+        DebitCard accout = new DebitCard(null, new TransactionManager());
         // when
         Integer key = new AccountKeyExtractor().extract(accout);
         // then

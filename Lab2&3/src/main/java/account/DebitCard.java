@@ -4,14 +4,12 @@ import java.time.LocalDate;
 import java.util.Collection;
 
 public class DebitCard implements Account {
-    private final long id;
     private final BonusAccount bonusAccount;
     private final TransactionManager transactionManager;
     private final Entries entries = new Entries();
 
-    public DebitCard(long id, BonusAccount bonusAccount, TransactionManager transactionManager) throws IllegalArgumentException {
+    public DebitCard(BonusAccount bonusAccount, TransactionManager transactionManager) throws IllegalArgumentException {
         if (transactionManager == null) throw new IllegalArgumentException();
-        this.id = id;
         this.bonusAccount = bonusAccount;
         this.transactionManager = transactionManager;
     }
@@ -110,5 +108,10 @@ public class DebitCard implements Account {
     @Override
     public void addEntry(Entry entry) {
         entries.addEntry(entry);
+    }
+
+    @Override
+    public Collection<Entry> getEntries(LocalDate from, LocalDate to) {
+        return entries.betweenDates(from, to);
     }
 }

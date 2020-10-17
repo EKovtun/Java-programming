@@ -6,6 +6,7 @@ import storage.AccountKeyExtractor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,9 +18,9 @@ class AnalyticsManagerTest {
     @BeforeEach
     void setUp() {
         TransactionManager transactionManager = new TransactionManager();
-        accountFirst = new DebitCard(1, null, transactionManager);
-        accountSecond = new DebitCard(2, null, transactionManager);
-        accountThird = new DebitCard(3, null, transactionManager);
+        accountFirst = new DebitCard(null, transactionManager);
+        accountSecond = new DebitCard(null, transactionManager);
+        accountThird = new DebitCard(null, transactionManager);
         accountFirst.addCash(1000);
         accountFirst.withdraw(100, accountSecond);
         accountFirst.withdraw(200, accountSecond);
@@ -49,6 +50,16 @@ class AnalyticsManagerTest {
         linksIsEqual = account == accountThird;
         // then
         assertTrue(linksIsEqual);
+    }
+
+    @Test
+    void mostFrequentBeneficiaryOfAccount_whenTransactionsIsNotExists() {
+        // given
+        DebitCard card = new DebitCard(null, new TransactionManager());
+        // when
+        Account account = analyticsManager.mostFrequentBeneficiaryOfAccount(card);
+        // then
+        assertNull(account);
     }
 
     @Test
@@ -99,9 +110,9 @@ class AnalyticsManagerTest {
     @Test
     void overallBalanceOfAccounts_whenVariousAccountsIsNull() {
         // given
-        accountFirst = new DebitCard(0, null, new TransactionManager());
-        accountSecond = new DebitCard(0, null, new TransactionManager());
-        accountThird = new DebitCard(0, null, new TransactionManager());
+        accountFirst = new DebitCard(null, new TransactionManager());
+        accountSecond = new DebitCard(null, new TransactionManager());
+        accountThird = new DebitCard(null, new TransactionManager());
         accountFirst.addCash(100);
         accountSecond.addCash(100);
         accountThird.addCash(100);
@@ -129,7 +140,7 @@ class AnalyticsManagerTest {
     void uniqueKeysOf_whenExtractorIsNull() {
         // given
         ArrayList<Account> accounts = new ArrayList<>();
-        accounts.add(new DebitCard(0, null, new TransactionManager()));
+        accounts.add(new DebitCard(null, new TransactionManager()));
         // when
         Set<Integer> keys = analyticsManager.uniqueKeysOf(accounts, null);
         // then
@@ -142,5 +153,47 @@ class AnalyticsManagerTest {
         Set<Integer> keys = analyticsManager.uniqueKeysOf(new ArrayList<>(), new AccountKeyExtractor());
         // then
         assertEquals(0, keys.size());
+    }
+
+    @Test
+    void maxExpenseAmountEntryWithinInterval_whenAccountsIsValid(){
+        // given
+        ArrayList<Account> array = new ArrayList<>();
+        array.add(accountFirst);
+        array.add(accountSecond);
+        array.add(accountThird);
+        // when
+        Optional<Entry> entryOptional = analyticsManager.maxExpenseAmountEntryWithinInterval(array, null, null);
+        Entry entry = entryOptional.get();
+        double amount = entry.getAmount();
+        Account account = entry.getAccount();
+        // then
+        assertNotNull(entry);
+        assertEquals(-300d, amount);
+        assertEquals(accountFirst, account);
+    }
+
+    @Test
+    void maxExpenseAmountEntryWithinInterval_whenAccountsIsInvalid(){
+        // given
+        ArrayList<Account> array = new ArrayList<>();
+        array.add(null);
+        // when
+        Optional<Entry> entryOptional = analyticsManager.maxExpenseAmountEntryWithinInterval(array, null, null);
+        boolean isNull = !entryOptional.isPresent();
+        // then
+        assertTrue(isNull);
+    }
+
+    @Test
+    void maxExpenseAmountEntryWithinInterval_whenEntriesIsNotExists(){
+        // given
+        ArrayList<Account> array = new ArrayList<>();
+        array.add(accountThird);
+        // when
+        Optional<Entry> entryOptional = analyticsManager.maxExpenseAmountEntryWithinInterval(array, null, null);
+        boolean isNull = !entryOptional.isPresent();
+        // then
+        assertTrue(isNull);
     }
 }
