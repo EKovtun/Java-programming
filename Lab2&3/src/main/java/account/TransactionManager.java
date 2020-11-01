@@ -5,12 +5,12 @@ import java.util.*;
 /**
  * Manages all transactions within the application
  */
-class TransactionManager {
+public class TransactionManager {
 
     private final Map<Account, Collection<Transaction>> transactionsMap;
     private long nextTransactionId;
 
-    TransactionManager() {
+    public TransactionManager() {
         transactionsMap = new HashMap<>();
         nextTransactionId = 0;
     }

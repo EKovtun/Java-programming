@@ -22,7 +22,7 @@ class DebitCardTest {
     @Test
     void balanceOn_whenAccountIsNotNew() {
         // given
-        Account accountFirst = new Account(1, new TransactionManager());
+        DebitCard accountFirst = new DebitCard(1, null, new TransactionManager());
         accountFirst.addCash(50);
         // when
         double valueFirst = accountFirst.balanceOn(null);
