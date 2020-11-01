@@ -20,7 +20,7 @@ public class AnalyticsManager {
 
         var result =  transactionManager.findAllTransactionsByAccount(account)
                 .stream()
-                .map(TransactionManager.Transaction::getBeneficiary)
+                .map(Transaction::getBeneficiary)
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
                 .entrySet()
                 .stream()
@@ -33,7 +33,7 @@ public class AnalyticsManager {
             return null;
     }
 
-    public Collection<TransactionManager.Transaction> topTenExpensivePurchases(Account account) throws IllegalArgumentException {
+    public Collection<Transaction> topTenExpensivePurchases(Account account) throws IllegalArgumentException {
         if (account == null) throw new IllegalArgumentException();
 
         return account.getEntries(null, null).stream()
