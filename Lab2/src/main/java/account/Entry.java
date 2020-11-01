@@ -8,11 +8,11 @@ import java.time.LocalDateTime;
  */
 class Entry {
     private final Account account;
-    private final TransactionManager.Transaction transaction;
+    private final Transaction transaction;
     private final double amount;
     private final LocalDateTime time;
 
-    Entry(Account account, TransactionManager.Transaction transaction, double amount, LocalDateTime time) throws IllegalArgumentException {
+    Entry(Account account, Transaction transaction, double amount, LocalDateTime time) throws IllegalArgumentException {
         if (account == null || transaction == null || time == null) {
             throw new IllegalArgumentException();
         }
@@ -35,7 +35,7 @@ class Entry {
         return amount;
     }
 
-    TransactionManager.Transaction getTransaction() {
+    Transaction getTransaction() {
         return transaction;
     }
 }

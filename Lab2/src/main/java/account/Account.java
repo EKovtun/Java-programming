@@ -26,7 +26,7 @@ public class Account {
      */
     public boolean addCash(double amount) {
         if (amount <= 0) return false;
-        var transaction = transactionManager.createTransaction(amount, null, this);
+        Transaction transaction = transactionManager.createTransaction(amount, null, this);
         return transactionManager.executeTransaction(transaction);
     }
 
@@ -56,7 +56,6 @@ public class Account {
     public boolean withdrawCash(double amount) {
         return withdraw(amount, null);
     }
-
 
     /**
      * Get entries history

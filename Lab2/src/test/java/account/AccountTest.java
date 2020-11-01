@@ -1,7 +1,5 @@
 package account;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -22,15 +20,22 @@ class AccountTest {
     }
 
     @Test
+    void balanceOn_whenAccountIsNotNew() {
+        // given
+        Account accountFirst = new Account(1, new TransactionManager());
+        accountFirst.addCash(50);
+        // when
+        double valueFirst = accountFirst.balanceOn(null);
+        // then
+        assertEquals(50, valueFirst);
+    }
+
+    @Test
     void addCash_whenAmountIsNegative() {
         // given
         Account accountFirst = new Account(1, new TransactionManager());
         // when
         boolean isSuccess = accountFirst.addCash(-5);
-        // then
-        assertFalse(isSuccess);
-        // when
-        isSuccess = accountFirst.addCash(0);
         // then
         assertFalse(isSuccess);
     }
@@ -46,21 +51,13 @@ class AccountTest {
     }
 
     @Test
-    void addCashAndBalanceOn_whenAmountIsValid() {
+    void addCash_whenAmountIsValid() {
         // given
         Account accountFirst = new Account(1, new TransactionManager());
         // when
         boolean isSuccess = accountFirst.addCash(50);
-        double valueFirst = accountFirst.balanceOn(null);
         // then
         assertTrue(isSuccess);
-        assertEquals(50, valueFirst);
-        // when
-        isSuccess = accountFirst.addCash(20);
-        valueFirst = accountFirst.balanceOn(null);
-        // then
-        assertTrue(isSuccess);
-        assertEquals(70, valueFirst);
     }
 
     @Test
@@ -69,10 +66,6 @@ class AccountTest {
         Account accountFirst = new Account(1, new TransactionManager());
         // when
         boolean isSuccess = accountFirst.withdrawCash(-5);
-        // then
-        assertFalse(isSuccess);
-        // when
-        isSuccess = accountFirst.withdrawCash(0);
         // then
         assertFalse(isSuccess);
     }
@@ -94,16 +87,8 @@ class AccountTest {
         accountFirst.addCash(50);
         // when
         boolean isSuccess = accountFirst.withdrawCash(20);
-        double valueFirst = accountFirst.balanceOn(null);
         // then
         assertTrue(isSuccess);
-        assertEquals(30, valueFirst);
-        // when
-        isSuccess = accountFirst.withdrawCash(30);
-        valueFirst = accountFirst.balanceOn(null);
-        // then
-        assertTrue(isSuccess);
-        assertEquals(0, valueFirst);
     }
 
     @Test
@@ -144,16 +129,8 @@ class AccountTest {
         accountFirst.addCash(50);
         // when
         boolean isSuccess = accountFirst.withdraw(20, null);
-        double valueFirst = accountFirst.balanceOn(null);
         // then
         assertTrue(isSuccess);
-        assertEquals(30, valueFirst);
-        // when
-        isSuccess = accountFirst.withdraw(30, null);
-        valueFirst = accountFirst.balanceOn(null);
-        // then
-        assertTrue(isSuccess);
-        assertEquals(0, valueFirst);
     }
 
     @Test
@@ -210,7 +187,7 @@ class AccountTest {
     void history_checkDateFrom() {
         // given
         Account accountFirst = new Account(1, new TransactionManager());
-        TransactionManager.Transaction transaction = new TransactionManager().createTransaction(10, null, null);
+        Transaction transaction = new TransactionManager().createTransaction(10, null, null);
         accountFirst.addEntry(new Entry(accountFirst, transaction, 4, LocalDateTime.now().minusDays(1)));
         accountFirst.addEntry(new Entry(accountFirst, transaction, 1, LocalDateTime.now()));
         accountFirst.addEntry(new Entry(accountFirst, transaction, 2, LocalDateTime.now()));
@@ -241,7 +218,7 @@ class AccountTest {
     void history_checkDateTo() {
         // given
         Account accountFirst = new Account(1, new TransactionManager());
-        TransactionManager.Transaction transaction = new TransactionManager().createTransaction(10, null, null);
+        Transaction transaction = new TransactionManager().createTransaction(10, null, null);
         accountFirst.addEntry(new Entry(accountFirst, transaction, 4, LocalDateTime.now().minusDays(1)));
         accountFirst.addEntry(new Entry(accountFirst, transaction, 1, LocalDateTime.now()));
         accountFirst.addEntry(new Entry(accountFirst, transaction, 2, LocalDateTime.now()));
@@ -272,7 +249,7 @@ class AccountTest {
     void history_checkDateToAndDateFrom() {
         // given
         Account accountFirst = new Account(1, new TransactionManager());
-        TransactionManager.Transaction transaction = new TransactionManager().createTransaction(10, null, null);
+        Transaction transaction = new TransactionManager().createTransaction(10, null, null);
         accountFirst.addEntry(new Entry(accountFirst, transaction, 4, LocalDateTime.now().minusDays(1)));
         accountFirst.addEntry(new Entry(accountFirst, transaction, 1, LocalDateTime.now()));
         accountFirst.addEntry(new Entry(accountFirst, transaction, 2, LocalDateTime.now()));
