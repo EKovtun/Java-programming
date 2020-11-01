@@ -59,7 +59,7 @@ class AnalyticsManagerTest {
     @Test
     void topTenExpensivePurchases_whenAccountDontHavePurchases() {
         // when
-        ArrayList<TransactionManager.Transaction> resultList = new ArrayList<>(analyticsManager.topTenExpensivePurchases(accountSecond));
+        ArrayList<Transaction> resultList = new ArrayList<>(analyticsManager.topTenExpensivePurchases(accountSecond));
         int sizeOfResultList = resultList.size();
         // then
         assertEquals(0, sizeOfResultList);
@@ -68,7 +68,7 @@ class AnalyticsManagerTest {
     @Test
     void topTenExpensivePurchases_whenAccountIsValid() {
         // when
-        ArrayList<TransactionManager.Transaction> resultList = new ArrayList<>(analyticsManager.topTenExpensivePurchases(accountFirst));
+        ArrayList<Transaction> resultList = new ArrayList<>(analyticsManager.topTenExpensivePurchases(accountFirst));
         int sizeOfResultList = resultList.size();
         double transaction1Amount = resultList.get(0).getAmount();
         double transaction2Amount = resultList.get(1).getAmount();

@@ -20,15 +20,22 @@ class DebitCardTest {
     }
 
     @Test
+    void balanceOn_whenAccountIsNotNew() {
+        // given
+        Account accountFirst = new Account(1, new TransactionManager());
+        accountFirst.addCash(50);
+        // when
+        double valueFirst = accountFirst.balanceOn(null);
+        // then
+        assertEquals(50, valueFirst);
+    }
+
+    @Test
     void addCash_whenAmountIsNegative() {
         // given
         DebitCard accountFirst = new DebitCard(1, null, new TransactionManager());
         // when
         boolean isSuccess = accountFirst.addCash(-5);
-        // then
-        assertFalse(isSuccess);
-        // when
-        isSuccess = accountFirst.addCash(0);
         // then
         assertFalse(isSuccess);
     }
@@ -44,21 +51,13 @@ class DebitCardTest {
     }
 
     @Test
-    void addCashAndBalanceOn_whenAmountIsValid() {
+    void addCash_whenAmountIsValid() {
         // given
         DebitCard accountFirst = new DebitCard(1, null, new TransactionManager());
         // when
         boolean isSuccess = accountFirst.addCash(50);
-        double valueFirst = accountFirst.balanceOn(null);
         // then
         assertTrue(isSuccess);
-        assertEquals(50, valueFirst);
-        // when
-        isSuccess = accountFirst.addCash(20);
-        valueFirst = accountFirst.balanceOn(null);
-        // then
-        assertTrue(isSuccess);
-        assertEquals(70, valueFirst);
     }
 
     @Test
@@ -67,10 +66,6 @@ class DebitCardTest {
         DebitCard accountFirst = new DebitCard(1, null, new TransactionManager());
         // when
         boolean isSuccess = accountFirst.withdrawCash(-5);
-        // then
-        assertFalse(isSuccess);
-        // when
-        isSuccess = accountFirst.withdrawCash(0);
         // then
         assertFalse(isSuccess);
     }
@@ -92,16 +87,8 @@ class DebitCardTest {
         accountFirst.addCash(50);
         // when
         boolean isSuccess = accountFirst.withdrawCash(20);
-        double valueFirst = accountFirst.balanceOn(null);
         // then
         assertTrue(isSuccess);
-        assertEquals(30, valueFirst);
-        // when
-        isSuccess = accountFirst.withdrawCash(30);
-        valueFirst = accountFirst.balanceOn(null);
-        // then
-        assertTrue(isSuccess);
-        assertEquals(0, valueFirst);
     }
 
     @Test
@@ -142,16 +129,8 @@ class DebitCardTest {
         accountFirst.addCash(50);
         // when
         boolean isSuccess = accountFirst.withdraw(20, null);
-        double valueFirst = accountFirst.balanceOn(null);
         // then
         assertTrue(isSuccess);
-        assertEquals(30, valueFirst);
-        // when
-        isSuccess = accountFirst.withdraw(30, null);
-        valueFirst = accountFirst.balanceOn(null);
-        // then
-        assertTrue(isSuccess);
-        assertEquals(0, valueFirst);
     }
 
     @Test
@@ -208,7 +187,7 @@ class DebitCardTest {
     void history_checkDateFrom() {
         // given
         DebitCard accountFirst = new DebitCard(1, null, new TransactionManager());
-        TransactionManager.Transaction transaction = new TransactionManager().createTransaction(10, null, null);
+        Transaction transaction = new TransactionManager().createTransaction(10, null, null);
         accountFirst.addEntry(new Entry(accountFirst, transaction, 4, LocalDateTime.now().minusDays(1)));
         accountFirst.addEntry(new Entry(accountFirst, transaction, 1, LocalDateTime.now()));
         accountFirst.addEntry(new Entry(accountFirst, transaction, 2, LocalDateTime.now()));
@@ -239,7 +218,7 @@ class DebitCardTest {
     void history_checkDateTo() {
         // given
         DebitCard accountFirst = new DebitCard(1, null, new TransactionManager());
-        TransactionManager.Transaction transaction = new TransactionManager().createTransaction(10, null, null);
+        Transaction transaction = new TransactionManager().createTransaction(10, null, null);
         accountFirst.addEntry(new Entry(accountFirst, transaction, 4, LocalDateTime.now().minusDays(1)));
         accountFirst.addEntry(new Entry(accountFirst, transaction, 1, LocalDateTime.now()));
         accountFirst.addEntry(new Entry(accountFirst, transaction, 2, LocalDateTime.now()));
@@ -270,7 +249,7 @@ class DebitCardTest {
     void history_checkDateToAndDateFrom() {
         // given
         DebitCard accountFirst = new DebitCard(1, null, new TransactionManager());
-        TransactionManager.Transaction transaction = new TransactionManager().createTransaction(10, null, null);
+        Transaction transaction = new TransactionManager().createTransaction(10, null, null);
         accountFirst.addEntry(new Entry(accountFirst, transaction, 4, LocalDateTime.now().minusDays(1)));
         accountFirst.addEntry(new Entry(accountFirst, transaction, 1, LocalDateTime.now()));
         accountFirst.addEntry(new Entry(accountFirst, transaction, 2, LocalDateTime.now()));
