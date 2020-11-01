@@ -10,12 +10,11 @@ public class FixedThreadPool implements ThreadPool {
     private boolean isStarted = false;
 
     public FixedThreadPool(int numberOfThreads) {
-        refillThreadsArray(numberOfThreads);
+        resetPool(numberOfThreads);
     }
 
     public void start() {
         if (isStarted) return;
-        stopFlag = false;
         threads.forEach(Thread::start);
         isStarted = true;
     }
@@ -26,7 +25,7 @@ public class FixedThreadPool implements ThreadPool {
         int numberOfThread = threads.size();
         synchronized (tasks) { tasks.notifyAll(); }
         for (Thread thread : threads) try { thread.join(); } catch (InterruptedException ignore) {}
-        refillThreadsArray(numberOfThread);
+        resetPool(numberOfThread);
         isStarted = false;
     }
 
@@ -37,7 +36,8 @@ public class FixedThreadPool implements ThreadPool {
         }
     }
 
-    private void refillThreadsArray(int numberOfThreads) {
+    private void resetPool(int numberOfThreads) {
+        stopFlag = false;
         threads.clear();
         for (; numberOfThreads != 0; --numberOfThreads)
             threads.add(new Thread(new Worker()));
