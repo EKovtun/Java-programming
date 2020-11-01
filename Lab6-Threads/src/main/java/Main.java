@@ -71,6 +71,21 @@ public class Main {
 //        } catch (InterruptedException e) {
 //            e.printStackTrace();
 //        }
+//
+//        for(int i = NUMBER_OF_TASKS_BEFORE_START + 1; i < NUMBER_OF_TASKS_BEFORE_START + NUMBER_OF_TASKS_AFTER_START + 1; ++i) {
+//            int finalI = i;
+//            scalableThreadPool.execute(() -> {
+//                Long time = finalI * 1000L;
+//                System.out.printf("Task %d sleep %d%n", finalI, time);
+//                try {
+//                    Thread.sleep(time);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                System.out.printf("Task %d unsleep before %d%n", finalI, time);
+//            });
+//        }
+
 //        scalableThreadPool.joinStop();
     }
 }

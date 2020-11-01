@@ -13,16 +13,13 @@ public class ScalableThreadPool implements ThreadPool {
     public ScalableThreadPool(int min, int max) {
         this.min = min;
         this.max = max;
-        refillThreadsArray(min);
+        resetPool(min);
     }
 
     public void start() {
         if (isStarted) return;
-        isStarted = true;
-        lowerBound = min;
-        count = 0;
-        inWork = 0;
         threads.forEach(Thread::start);
+        isStarted = true;
     }
 
     public void joinStop() {
@@ -30,7 +27,7 @@ public class ScalableThreadPool implements ThreadPool {
         lowerBound = 0;
         synchronized (tasks) { tasks.notifyAll(); }
         for (Thread thread : threads) try { thread.join(); } catch (InterruptedException ignore) {}
-        refillThreadsArray(min);
+        resetPool(min);
         isStarted = false;
     }
 
@@ -41,7 +38,10 @@ public class ScalableThreadPool implements ThreadPool {
         }
     }
 
-    private void refillThreadsArray(int numberOfThreads) {
+    private void resetPool(int numberOfThreads) {
+        lowerBound = min;
+        count = 0;
+        inWork = 0;
         threads.clear();
         for (; numberOfThreads != 0; --numberOfThreads)
             threads.add(createThread());
