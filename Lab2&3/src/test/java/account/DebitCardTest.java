@@ -188,30 +188,15 @@ class DebitCardTest {
         // given
         DebitCard accountFirst = new DebitCard(1, null, new TransactionManager());
         Transaction transaction = new TransactionManager().createTransaction(10, null, null);
-        accountFirst.addEntry(new Entry(accountFirst, transaction, 4, LocalDateTime.now().minusDays(1)));
-        accountFirst.addEntry(new Entry(accountFirst, transaction, 1, LocalDateTime.now()));
-        accountFirst.addEntry(new Entry(accountFirst, transaction, 2, LocalDateTime.now()));
-        accountFirst.addEntry(new Entry(accountFirst, transaction, 3, LocalDateTime.now().plusDays(1)));
+        accountFirst.addEntry(new Entry(accountFirst, transaction, 5, LocalDateTime.now().plusDays(1)));
 
         // when
-        ArrayList<Entry> resultList = new ArrayList<>(accountFirst.history(LocalDate.now(), null));
-        Entry firstEntry = resultList.get(0);
-        Entry secondEntry = resultList.get(1);
-        Entry threeEntry = resultList.get(2);
-
-        // then
-        assertEquals(3, resultList.size());
-        assertEquals(1, firstEntry.getAmount());
-        assertEquals(2, secondEntry.getAmount());
-        assertEquals(3, threeEntry.getAmount());
-
-        // when
-        resultList = new ArrayList<>(accountFirst.history(LocalDate.now().plusDays(1), null));
-        firstEntry = resultList.get(0);
+        ArrayList<Entry> resultList = new ArrayList<>(accountFirst.history(LocalDate.now().plusDays(1), null));
+        Entry entry = resultList.get(0);
 
         // then
         assertEquals(1, resultList.size());
-        assertEquals(3, firstEntry.getAmount());
+        assertEquals(5, entry.getAmount());
     }
 
     @Test

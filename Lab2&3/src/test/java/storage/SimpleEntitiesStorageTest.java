@@ -17,7 +17,7 @@ class SimpleEntitiesStorageTest {
     @Test
     void save() {
         // given
-        SimpleEntitiesStorage<Account> storage = new SimpleEntitiesStorage<>(new AccountKeyExtractor());
+        SimpleEntitiesStorage<Integer, Account> storage = new SimpleEntitiesStorage<>(new AccountKeyExtractor());
         BonusAccount bonusAccount = new BonusAccount(10, new TransactionManager());
         DebitCard debitCard = new DebitCard(0, bonusAccount, new TransactionManager());
         // when
@@ -36,7 +36,7 @@ class SimpleEntitiesStorageTest {
     @Test
     void save_whenEntityIsNull() {
         // given
-        SimpleEntitiesStorage<Account> storage = new SimpleEntitiesStorage<>(new AccountKeyExtractor());
+        SimpleEntitiesStorage<Integer, Account> storage = new SimpleEntitiesStorage<>(new AccountKeyExtractor());
         // when
         storage.save(null);
         Collection<Account> allEntity = storage.findAll();
@@ -48,7 +48,7 @@ class SimpleEntitiesStorageTest {
     @Test
     void saveAll() {
         // given
-        SimpleEntitiesStorage<Account> storage = new SimpleEntitiesStorage<>(new AccountKeyExtractor());
+        SimpleEntitiesStorage<Integer, Account> storage = new SimpleEntitiesStorage<>(new AccountKeyExtractor());
         BonusAccount bonusAccount = new BonusAccount(10, new TransactionManager());
         DebitCard debitCard = new DebitCard(0, bonusAccount, new TransactionManager());
         // when
@@ -69,7 +69,7 @@ class SimpleEntitiesStorageTest {
     @Test
     void saveAll_whenCollectionIsNull() {
         // given
-        SimpleEntitiesStorage<Account> storage = new SimpleEntitiesStorage<>(new AccountKeyExtractor());
+        SimpleEntitiesStorage<Integer, Account> storage = new SimpleEntitiesStorage<>(new AccountKeyExtractor());
         // when
         storage.saveAll(null);
         Collection<Account> allEntity = storage.findAll();
@@ -81,7 +81,7 @@ class SimpleEntitiesStorageTest {
     @Test
     void saveAll_whenNullInList() {
         // given
-        SimpleEntitiesStorage<Account> storage = new SimpleEntitiesStorage<>(new AccountKeyExtractor());
+        SimpleEntitiesStorage<Integer, Account> storage = new SimpleEntitiesStorage<>(new AccountKeyExtractor());
         BonusAccount bonusAccount = new BonusAccount(10, new TransactionManager());
         DebitCard debitCard = new DebitCard(0, bonusAccount, new TransactionManager());
         // when
@@ -106,7 +106,7 @@ class SimpleEntitiesStorageTest {
     void findByKey() {
         // given
         AccountKeyExtractor keyExtractor = new AccountKeyExtractor();
-        SimpleEntitiesStorage<Account> storage = new SimpleEntitiesStorage<>(keyExtractor);
+        SimpleEntitiesStorage<Integer, Account> storage = new SimpleEntitiesStorage<>(keyExtractor);
         BonusAccount bonusAccount = new BonusAccount(10, new TransactionManager());
         DebitCard debitCard = new DebitCard(0, bonusAccount, new TransactionManager());
         storage.save(bonusAccount);
@@ -122,7 +122,7 @@ class SimpleEntitiesStorageTest {
     @Test
     void findByKey_whenKeyIsNull() {
         // given
-        SimpleEntitiesStorage<Account> storage = new SimpleEntitiesStorage<>(new AccountKeyExtractor());
+        SimpleEntitiesStorage<Integer, Account> storage = new SimpleEntitiesStorage<>(new AccountKeyExtractor());
         BonusAccount bonusAccount = new BonusAccount(10, new TransactionManager());
         DebitCard debitCard = new DebitCard(0, bonusAccount, new TransactionManager());
         storage.save(bonusAccount);
@@ -137,7 +137,7 @@ class SimpleEntitiesStorageTest {
     void findByKey_whenKeyIsNotExists() {
         // given
         AccountKeyExtractor keyExtractor = new AccountKeyExtractor();
-        SimpleEntitiesStorage<Account> storage = new SimpleEntitiesStorage<>(new AccountKeyExtractor());
+        SimpleEntitiesStorage<Integer, Account> storage = new SimpleEntitiesStorage<>(new AccountKeyExtractor());
         BonusAccount bonusAccount = new BonusAccount(10, new TransactionManager());
         DebitCard debitCard = new DebitCard(0, bonusAccount, new TransactionManager());
         storage.save(bonusAccount);
@@ -153,7 +153,7 @@ class SimpleEntitiesStorageTest {
     @Test
     void findAll() {
         // given
-        SimpleEntitiesStorage<Account> storage = new SimpleEntitiesStorage<>(new AccountKeyExtractor());
+        SimpleEntitiesStorage<Integer, Account> storage = new SimpleEntitiesStorage<>(new AccountKeyExtractor());
         BonusAccount bonusAccount = new BonusAccount(10, new TransactionManager());
         DebitCard debitCard = new DebitCard(0, bonusAccount, new TransactionManager());
         storage.save(bonusAccount);
@@ -172,7 +172,7 @@ class SimpleEntitiesStorageTest {
     @Test
     void findAll_whenStorageIsEmpty() {
         // given
-        SimpleEntitiesStorage<Account> storage = new SimpleEntitiesStorage<>(new AccountKeyExtractor());
+        SimpleEntitiesStorage<Integer, Account> storage = new SimpleEntitiesStorage<>(new AccountKeyExtractor());
         // when
         ArrayList<Account> resultList = new ArrayList<>(storage.findAll());
         int sizeResult = resultList.size();
@@ -184,7 +184,7 @@ class SimpleEntitiesStorageTest {
     void deleteByKey() {
         // given
         AccountKeyExtractor keyExtractor = new AccountKeyExtractor();
-        SimpleEntitiesStorage<Account> storage = new SimpleEntitiesStorage<>(keyExtractor);
+        SimpleEntitiesStorage<Integer, Account> storage = new SimpleEntitiesStorage<>(keyExtractor);
         BonusAccount bonusAccount = new BonusAccount(10, new TransactionManager());
         DebitCard debitCard = new DebitCard(0, bonusAccount, new TransactionManager());
         storage.save(bonusAccount);
@@ -205,7 +205,7 @@ class SimpleEntitiesStorageTest {
     void deleteByKey_whenKeyIsNull() {
         // given
         AccountKeyExtractor keyExtractor = new AccountKeyExtractor();
-        SimpleEntitiesStorage<Account> storage = new SimpleEntitiesStorage<>(keyExtractor);
+        SimpleEntitiesStorage<Integer, Account> storage = new SimpleEntitiesStorage<>(keyExtractor);
         BonusAccount bonusAccount = new BonusAccount(10, new TransactionManager());
         DebitCard debitCard = new DebitCard(0, bonusAccount, new TransactionManager());
         storage.save(bonusAccount);
@@ -226,7 +226,7 @@ class SimpleEntitiesStorageTest {
     void deleteByKey_whenKeyIsNotExists() {
         // given
         AccountKeyExtractor keyExtractor = new AccountKeyExtractor();
-        SimpleEntitiesStorage<Account> storage = new SimpleEntitiesStorage<>(keyExtractor);
+        SimpleEntitiesStorage<Integer, Account> storage = new SimpleEntitiesStorage<>(keyExtractor);
         BonusAccount bonusAccount = new BonusAccount(10, new TransactionManager());
         DebitCard debitCard = new DebitCard(0, bonusAccount, new TransactionManager());
         storage.save(bonusAccount);
@@ -247,7 +247,7 @@ class SimpleEntitiesStorageTest {
     void deleteAll() {
         // given
         AccountKeyExtractor keyExtractor = new AccountKeyExtractor();
-        SimpleEntitiesStorage<Account> storage = new SimpleEntitiesStorage<>(keyExtractor);
+        SimpleEntitiesStorage<Integer, Account> storage = new SimpleEntitiesStorage<>(keyExtractor);
         BonusAccount bonusAccount = new BonusAccount(10, new TransactionManager());
         DebitCard debitCard = new DebitCard(0, bonusAccount, new TransactionManager());
         BonusAccount bonusAccount2 = new BonusAccount(10, new TransactionManager());

@@ -2,6 +2,7 @@ package account;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Objects;
 
 public class DebitCard implements Account {
     private final long id;
@@ -110,5 +111,21 @@ public class DebitCard implements Account {
     @Override
     public void addEntry(Entry entry) {
         entries.addEntry(entry);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DebitCard debitCard = (DebitCard) o;
+        return id == debitCard.id &&
+                Objects.equals(bonusAccount, debitCard.bonusAccount) &&
+                Objects.equals(transactionManager, debitCard.transactionManager) &&
+                Objects.equals(entries, debitCard.entries);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, bonusAccount, transactionManager, entries);
     }
 }

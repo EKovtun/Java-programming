@@ -4,11 +4,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SimpleEntitiesStorage<V> implements BankEntitiesStorage<V> {
-    private final Map<Object, V> storage = new HashMap<>();
-    private final KeyExtractor<?, ? super V> keyExtractor;
+public class SimpleEntitiesStorage<K, V> implements BankEntitiesStorage<K, V> {
+    private final Map<K, V> storage = new HashMap<>();
+    private final KeyExtractor<? super K, ? super V> keyExtractor;
 
-    public SimpleEntitiesStorage(KeyExtractor<?, ? super V> keyExtractor) {
+    public SimpleEntitiesStorage(KeyExtractor<? super K, ? super V> keyExtractor) {
         this.keyExtractor = keyExtractor;
     }
 
@@ -27,7 +27,7 @@ public class SimpleEntitiesStorage<V> implements BankEntitiesStorage<V> {
     }
 
     @Override
-    public V findByKey(Object key) {
+    public V findByKey(K key) {
         return storage.get(key);
     }
 
@@ -37,7 +37,7 @@ public class SimpleEntitiesStorage<V> implements BankEntitiesStorage<V> {
     }
 
     @Override
-    public void deleteByKey(Object key) {
+    public void deleteByKey(K key) {
         storage.remove(key);
     }
 

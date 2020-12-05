@@ -60,7 +60,7 @@ public class TransactionManager {
     }
 
     public boolean executeTransactions(Transaction... transactions) {
-        LinkedList<Transaction> executedTransactionsList = new LinkedList<>();
+        List<Transaction> executedTransactionsList = new ArrayList<>();
         for (Transaction transaction: transactions) {
             if (transaction == null) continue;
             if (!executeTransaction(transaction)) {
@@ -68,7 +68,7 @@ public class TransactionManager {
                     rollbackTransaction(executedTransaction);
                 }
             } else {
-                executedTransactionsList.push(transaction);
+                executedTransactionsList.add(transaction);
             }
         }
         return true;

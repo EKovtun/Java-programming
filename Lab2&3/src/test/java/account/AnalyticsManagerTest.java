@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import storage.AccountKeyExtractor;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -34,19 +35,16 @@ class AnalyticsManagerTest {
 
     @Test
     void mostFrequentBeneficiaryOfAccount_whenAccountIsValid() {
+        //given
+        TransactionManager transactionManager = new TransactionManager();
+        accountFirst = new DebitCard(1, null, transactionManager);
+        accountSecond = new DebitCard(2, null, transactionManager);
+        accountFirst.addCash(1000);
+        accountFirst.withdraw(100, accountSecond);
+        analyticsManager = new AnalyticsManager(transactionManager);
         // when
         Account account = analyticsManager.mostFrequentBeneficiaryOfAccount(accountFirst);
-        boolean linksIsEqual = account == accountSecond;
-        // then
-        assertTrue(linksIsEqual);
-        // when
-        account = analyticsManager.mostFrequentBeneficiaryOfAccount(accountSecond);
-        linksIsEqual = account == accountSecond;
-        // then
-        assertTrue(linksIsEqual);
-        // when
-        account = analyticsManager.mostFrequentBeneficiaryOfAccount(accountThird);
-        linksIsEqual = account == accountThird;
+        boolean linksIsEqual = account.equals(accountFirst);
         // then
         assertTrue(linksIsEqual);
     }
@@ -120,7 +118,7 @@ class AnalyticsManagerTest {
     @Test
     void uniqueKeysOf_whenAccountsIsNull() {
         // when
-        Set<Integer> keys = analyticsManager.uniqueKeysOf(null, new AccountKeyExtractor());
+        Collection<Integer> keys = analyticsManager.uniqueKeysOf(null, new AccountKeyExtractor());
         // then
         assertEquals(0, keys.size());
     }
@@ -131,7 +129,7 @@ class AnalyticsManagerTest {
         ArrayList<Account> accounts = new ArrayList<>();
         accounts.add(new DebitCard(0, null, new TransactionManager()));
         // when
-        Set<Integer> keys = analyticsManager.uniqueKeysOf(accounts, null);
+        Collection<Integer> keys = analyticsManager.uniqueKeysOf(accounts, null);
         // then
         assertEquals(0, keys.size());
     }
@@ -139,7 +137,7 @@ class AnalyticsManagerTest {
     @Test
     void uniqueKeysOf_whenAccountsIsEmpty() {
         // when
-        Set<Integer> keys = analyticsManager.uniqueKeysOf(new ArrayList<>(), new AccountKeyExtractor());
+        Collection<Integer> keys = analyticsManager.uniqueKeysOf(new ArrayList<>(), new AccountKeyExtractor());
         // then
         assertEquals(0, keys.size());
     }

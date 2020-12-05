@@ -7,7 +7,7 @@ import java.util.*;
  * Collection of entries for the account. Use it to save and get history of payments
  */
 class Entries {
-    private SortedMap<LocalDate, Collection<Entry>> entriesMap;
+    final private SortedMap<LocalDate, Collection<Entry>> entriesMap;
 
     Entries() {
         entriesMap = new TreeMap<>();

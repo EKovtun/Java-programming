@@ -10,7 +10,12 @@ public class Transaction {
     private final boolean executed;
     private final boolean rolledBack;
 
-    Transaction(long id, double amount, Account originator, Account beneficiary, boolean executed, boolean rolledBack) {
+    Transaction(long id,
+                double amount,
+                Account originator,
+                Account beneficiary,
+                boolean executed,
+                boolean rolledBack) {
         this.id = id;
         this.amount = amount;
         this.originator = originator;
@@ -25,7 +30,7 @@ public class Transaction {
      * @throws IllegalStateException when was already executed
      */
     public Transaction execute() throws IllegalStateException {
-        if (executed) throw new IllegalStateException();
+        if (executed) throw new IllegalStateException("Attempt to execute a previously executed transaction");
         Transaction executedTransaction =
                 new Transaction(this.getId() + 1, amount, originator, beneficiary, true, rolledBack);
         if (originator != null) {

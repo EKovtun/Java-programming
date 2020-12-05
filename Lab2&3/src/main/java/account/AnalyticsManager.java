@@ -1,6 +1,5 @@
 package account;
 
-import storage.AccountKeyExtractor;
 import storage.KeyExtractor;
 
 import java.util.*;
@@ -54,7 +53,7 @@ public class AnalyticsManager {
         return result;
     }
 
-    public double overallBalanceOfAccounts(List<Account> accounts) {
+    public double overallBalanceOfAccounts(List<? extends Account> accounts) {
         if (accounts == null) return 0d;
         double result = 0d;
         for (Account account : accounts) {
@@ -64,8 +63,8 @@ public class AnalyticsManager {
         return result;
     }
 
-    public <R extends Comparable<? super R>, T extends Account> Set<R> uniqueKeysOf(List<T> accounts, KeyExtractor<R, Account> extractor) {
-        Set<R> resultList = new TreeSet<>();
+    public <R, T extends Account> Collection<R> uniqueKeysOf(List<T> accounts, KeyExtractor<R, Account> extractor) {
+        Collection<R> resultList = new ArrayList<>();
         if (accounts == null || extractor == null) return resultList;
         for(Account account : accounts) {
             resultList.add(extractor.extract(account));
@@ -73,9 +72,9 @@ public class AnalyticsManager {
         return resultList;
     }
 
-    public <T extends Account> List<T> accountsRangeFrom(List<T> accounts, T minAccount, Comparator<T> comparator) {
+    public <T extends Account> List<T> accountsRangeFrom(List<? extends T> accounts, T minAccount, Comparator<? super T> comparator) {
         if (accounts == null || comparator == null) return new ArrayList<>();
-        var resultList = new ArrayList<>(accounts);
+        var resultList = new ArrayList<T>(accounts);
         resultList.sort(comparator);
         int minAccountIndex = minAccount == null ? 0 : resultList.indexOf(minAccount);
         resultList.subList(minAccountIndex, resultList.size() - 1);

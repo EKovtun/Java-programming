@@ -1,5 +1,5 @@
 package storage;
 
 public interface KeyExtractor<K, V> {
-    <T extends V> K extract(T entity);
+    <T1 extends K, T2 extends V> T1 extract(T2 entity);
 }
