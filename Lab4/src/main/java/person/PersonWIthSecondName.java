@@ -4,7 +4,7 @@ import report.Reported;
 
 public class PersonWIthSecondName extends Person {
     @Reported
-    String secondName;
+    final String secondName;
 
     String withoutAnnotationField = "=))";
 

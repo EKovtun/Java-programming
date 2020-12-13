@@ -2,7 +2,11 @@ package report;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
+import static java.util.Collections.emptyList;
 
 class ReportUtils {
     /**
@@ -11,14 +15,16 @@ class ReportUtils {
      * @param onlyWithAnnotation Возврат только репорт-полей с аннотацией <code>@Reported</code>
      * @return Репорт-поля
      */
-    static ArrayList<Field> getReportedFieldsForClass(Class<?> clazz, boolean onlyWithAnnotation) {
-        ArrayList<Field> fields = new ArrayList<>();
+    static List<Field> getReportedFieldsForClass(Class<?> clazz, boolean onlyWithAnnotation) {
+        List<Field> fields = new ArrayList<>();
         int insertIndex = 0;
 
         while (clazz != null) {
             for (var field : clazz.getDeclaredFields())
-                if (!onlyWithAnnotation || field.isAnnotationPresent(Reported.class))
+                if (!onlyWithAnnotation || field.isAnnotationPresent(Reported.class)) {
+                    field.setAccessible(true);
                     fields.add(insertIndex++, field);
+                }
 
             clazz = clazz.getSuperclass();
             insertIndex = 0;
@@ -33,23 +39,23 @@ class ReportUtils {
      * @param fieldsNamesMap Словарь полей, имя которых следует сменить при генерации.
      * @return Имена репорт-полей
      */
-    static ArrayList<String> getReportedFieldsNames(ArrayList<Field> reportedFields, Map<String, String> fieldsNamesMap) {
-        if (reportedFields == null) return new ArrayList<>();
-        ArrayList<String> reportedNames = new ArrayList<>();
+    static List<String> getReportedFieldsNames(List<Field> reportedFields, Map<String, String> fieldsNamesMap) {
+        if (reportedFields == null) return emptyList();
+        List<String> reportedNames = new ArrayList<>();
 
         for(Field field : reportedFields) {
             String fieldName = field.getName();
-            String replaceFieldName = fieldsNamesMap.get(fieldName);
-            if (replaceFieldName != null) {
-                reportedNames.add(replaceFieldName);
-            } else if (field.isAnnotationPresent(Reported.class)
-                    && !field.getAnnotation(Reported.class).reportFieldName().trim().isEmpty()) {
-                reportedNames.add(field.getAnnotation(Reported.class).reportFieldName().trim());
-            } else {
-                reportedNames.add(fieldName);
-            }
+            String replaceFieldName = fieldsNamesMap.getOrDefault(fieldName, fieldIsReportedAndHasReportedName(field)?
+                    field.getAnnotation(Reported.class).reportFieldName().trim() : null);
+
+            reportedNames.add(Objects.requireNonNullElse(replaceFieldName, fieldName));
         }
 
         return reportedNames;
+    }
+
+    private static boolean fieldIsReportedAndHasReportedName(Field field) {
+        return field.isAnnotationPresent(Reported.class)
+                && !field.getAnnotation(Reported.class).reportFieldName().trim().isEmpty();
     }
 }

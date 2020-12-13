@@ -4,7 +4,7 @@ import report.Reported;
 
 public class Person {
     @Reported(reportFieldName = "Имя")
-    String name;
+    final String name;
 
     @Reported(reportFieldName = "Возраст")
     int age;

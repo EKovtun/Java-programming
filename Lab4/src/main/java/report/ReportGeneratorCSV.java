@@ -1,14 +1,11 @@
 package report;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ReportGeneratorCSV<T> implements ReportGenerator<T> {
-    Class<T> clazz;
-    Map<String, String> fieldsNamesMap = new HashMap<>();
+    private final Class<T> clazz;
+    private final Map<String, String> fieldsNamesMap;
 
     /**
      * @param clazz Класс, над которым производится рефлексия
@@ -25,14 +22,14 @@ public class ReportGeneratorCSV<T> implements ReportGenerator<T> {
      */
     public ReportGeneratorCSV(Class<T> clazz, Map<String, String> fieldsNames) throws IllegalArgumentException {
         if (clazz == null) throw new IllegalArgumentException();
-        if (fieldsNames != null) this.fieldsNamesMap = fieldsNames;
+        this.fieldsNamesMap = Objects.requireNonNullElseGet(fieldsNames, HashMap::new);
         this.clazz = clazz;
     }
 
     @Override
-    public ReportCSV generateOnlyAnnotation(List<? extends T> entities) {
+    public Report generateOnlyAnnotation(List<? extends T> entities) {
         if (entities == null || entities.isEmpty()) return new ReportCSV(new byte[0]);
-        ArrayList<Field> reportedFields = new ArrayList<>(
+        List<Field> reportedFields = new ArrayList<>(
                 ReportUtils.getReportedFieldsForClass(clazz, true));
         return generate(entities, reportedFields);
     }
@@ -40,7 +37,7 @@ public class ReportGeneratorCSV<T> implements ReportGenerator<T> {
     @Override
     public Report generateWithAllFields(List<? extends T> entities) {
         if (entities == null || entities.isEmpty()) return new ReportCSV(new byte[0]);
-        ArrayList<Field> reportedFields = new ArrayList<>(
+        List<Field> reportedFields = new ArrayList<>(
                 ReportUtils.getReportedFieldsForClass(clazz, false));
         return generate(entities, reportedFields);
     }
@@ -51,7 +48,7 @@ public class ReportGeneratorCSV<T> implements ReportGenerator<T> {
      * @param reportedFields репорт-поля по которым строится репорт
      * @return CSV-репорт
      */
-    private ReportCSV generate(List<? extends T> entities, ArrayList<Field> reportedFields) {
+    private Report generate(List<? extends T> entities, List<Field> reportedFields) {
         if (reportedFields == null || reportedFields.isEmpty()) return new ReportCSV(new byte[0]);
 
         StringBuilder builder = new StringBuilder();
@@ -64,7 +61,6 @@ public class ReportGeneratorCSV<T> implements ReportGenerator<T> {
             valuesOfFields.clear();
 
             for(Field reportedField : reportedFields) {
-                reportedField.setAccessible(true);
                 try {
                     valuesOfFields.add(reportedField.get(entity).toString());
                 } catch (NullPointerException | IllegalAccessException e ) {
