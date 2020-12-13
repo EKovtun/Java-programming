@@ -37,19 +37,9 @@ class AnalyticsManagerTest {
     void mostFrequentBeneficiaryOfAccount_whenAccountIsValid() {
         // when
         Account account = analyticsManager.mostFrequentBeneficiaryOfAccount(accountFirst);
-        boolean linksIsEqual = account == accountSecond;
+        boolean isEqual = account.equals(accountSecond);
         // then
-        assertTrue(linksIsEqual);
-        // when
-        account = analyticsManager.mostFrequentBeneficiaryOfAccount(accountSecond);
-        linksIsEqual = account == accountSecond;
-        // then
-        assertTrue(linksIsEqual);
-        // when
-        account = analyticsManager.mostFrequentBeneficiaryOfAccount(accountThird);
-        linksIsEqual = account == accountThird;
-        // then
-        assertTrue(linksIsEqual);
+        assertTrue(isEqual);
     }
 
     @Test

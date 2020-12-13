@@ -36,4 +36,9 @@ public class BonusAccount implements Account {
     public Collection<Entry> getEntries(LocalDate from, LocalDate to) {
         return entries.betweenDates(from, to);
     }
+
+    @Override
+    public Collection<Entry> getAllEntries() {
+        return entries.betweenDates(null, null);
+    }
 }

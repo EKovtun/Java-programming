@@ -18,25 +18,21 @@ public class AnalyticsManager {
     public Account mostFrequentBeneficiaryOfAccount(Account account) throws IllegalArgumentException {
         if (account == null) throw new IllegalArgumentException();
 
-        var result =  transactionManager.findAllTransactionsByAccount(account)
+        return transactionManager.findAllTransactionsByAccount(account)
                 .stream()
                 .map(Transaction::getBeneficiary)
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
                 .entrySet()
                 .stream()
                 .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
                 .orElse(null);
-
-        if (result != null)
-            return result.getKey();
-        else
-            return null;
     }
 
     public Collection<Transaction> topTenExpensivePurchases(Account account) throws IllegalArgumentException {
         if (account == null) throw new IllegalArgumentException();
 
-        return account.getEntries(null, null).stream()
+        return account.getAllEntries().stream()
                 .sorted(Comparator.comparing(Entry::getAmount))
                 .filter(entry -> entry.getAmount() < 0)
                 .limit(10)
@@ -52,7 +48,7 @@ public class AnalyticsManager {
                 .sum();
     }
 
-    public Optional<Entry> maxExpenseAmountEntryWithinInterval(List<Account> accounts, LocalDate from, LocalDate to) {
+    public Optional<Entry> maxExpenseAmountEntryWithinInterval(List<? extends Account> accounts, LocalDate from, LocalDate to) {
         if (accounts == null) return Optional.empty();
         return accounts.stream()
                 .filter(Objects::nonNull)
@@ -64,16 +60,17 @@ public class AnalyticsManager {
 
     public <R extends Comparable<? super R>, T extends Account> Set<R> uniqueKeysOf(List<T> accounts, KeyExtractor<R, Account> extractor) {
         if (accounts == null || extractor == null) return new TreeSet<>();
-        return accounts.stream().map(extractor::extract).collect(Collectors.toSet());
+        return accounts.stream()
+                .map(extractor::extract)
+                .collect(Collectors.toSet());
     }
 
     public <T extends Account> List<T> accountsRangeFrom(List<T> accounts, T minAccount, Comparator<T> comparator) {
         if (accounts == null || comparator == null) return new ArrayList<>();
         return accounts.stream()
-                .filter(account -> {
-                    if (account == null) return false;
-                    else return comparator.compare(minAccount, account) >= 0;
-                })
+                .filter(Objects::nonNull)
+                .filter(account -> comparator.compare(minAccount, account) >= 0)
+                .sorted(comparator)
                 .collect(Collectors.toList());
     }
 }

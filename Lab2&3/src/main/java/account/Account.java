@@ -24,4 +24,6 @@ public interface Account {
      * @return entries
      */
     Collection<Entry> getEntries(LocalDate from, LocalDate to);
+
+    Collection<Entry> getAllEntries();
 }
