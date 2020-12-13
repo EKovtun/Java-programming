@@ -56,24 +56,32 @@ public class ScalableThreadPool implements ThreadPool {
         return new Thread(new AutoScalableWorker());
     }
 
-    private synchronized void incCount() {
-        ++count;
+    private void incCount() {
+        synchronized (tasks) {
+            ++count;
+        }
         System.out.printf("Threads: %d; In worK: %d%n", count, inWork);
     }
 
-    private synchronized void decCount() {
-        --count;
+    private void decCount() {
+        synchronized (tasks) {
+            --count;
+        }
         System.out.printf("Threads: %d; In worK: %d%n", count, inWork);
     }
 
-    private synchronized void incInWork() {
-        ++inWork;
-        scale();
+    private void incInWork() {
+        synchronized (tasks) {
+            ++inWork;
+            scale();
+        }
         System.out.printf("Threads: %d; In worK: %d%n", count, inWork);
     }
 
-    private synchronized void decInWork() {
-        --inWork;
+    private void decInWork() {
+        synchronized (tasks) {
+            --inWork;
+        }
         System.out.printf("Threads: %d; In worK: %d%n", count, inWork);
     }
 

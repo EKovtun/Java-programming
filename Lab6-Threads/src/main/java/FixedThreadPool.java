@@ -23,8 +23,12 @@ public class FixedThreadPool implements ThreadPool {
         if (!isStarted) return;
         stopFlag = true;
         int numberOfThread = threads.size();
-        synchronized (tasks) { tasks.notifyAll(); }
-        for (Thread thread : threads) try { thread.join(); } catch (InterruptedException ignore) {}
+        synchronized (tasks) {
+            tasks.notifyAll();
+        }
+        for (Thread thread : threads) try {
+            thread.join();
+        } catch (InterruptedException ignore) {}
         resetPool(numberOfThread);
         isStarted = false;
     }
